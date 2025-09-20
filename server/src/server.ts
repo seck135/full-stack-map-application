@@ -7,7 +7,7 @@ dotenv.config();
 const PORT = process.env.PORT || 5000;
 const MONGO_URI = process.env.MONGO_URI as string;
 
-// חיבור ל־MongoDB והפעלת השרת
+// Connects to MongoDB and starts the server
 async function startServer() {
     try {
         await mongoose.connect(MONGO_URI);

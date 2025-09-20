@@ -20,7 +20,7 @@ const polygonSchema = new Schema<PolygonDocument>(
             }
         ]
     },
-    { versionKey: false }
+    { collection: "polygons", versionKey: false }
 );
 
 export const Polygon = model<PolygonDocument>("Polygon", polygonSchema);

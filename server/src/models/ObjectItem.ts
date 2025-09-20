@@ -6,10 +6,13 @@ export interface ObjectItemDocument extends Document {
     lon: number;
 }
 
-const objectItemSchema = new Schema<ObjectItemDocument>({
-    name: { type: String, required: true },
-    lat: { type: Number, required: true },
-    lon: { type: Number, required: true },
-});
+const objectItemSchema = new Schema<ObjectItemDocument>(
+    {
+        name: { type: String, required: true },
+        lat: { type: Number, required: true },
+        lon: { type: Number, required: true },
+    },
+    { collection: "objects", versionKey: false }
+);
 
 export const ObjectItem = model<ObjectItemDocument>("ObjectItem", objectItemSchema);

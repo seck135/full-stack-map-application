@@ -4,10 +4,10 @@ import objectsRouter from "./routes/objects";
 
 const app = express();
 
-// כדי ש־Express ידע לפרסר JSON
+// This middleware is responsible for parsing incoming request bodies with a JSON payload
 app.use(express.json());
 
-// חיבור ה־routes
+// routes
 app.use("/api/polygons", polygonsRouter);
 app.use("/api/objects", objectsRouter);
 

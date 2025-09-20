@@ -3,20 +3,20 @@ import { Polygon } from "../models/Polygon";
 
 const router = Router();
 
-// GET כל הפוליגונים
+// GET all polygons
 router.get("/", async (req, res) => {
     const polygons = await Polygon.find();
     res.json(polygons);
 });
 
-// GET פוליגון לפי id
+// GET polygon by id
 router.get("/:id", async (req, res) => {
     const polygon = await Polygon.findById(req.params.id);
     if (!polygon) return res.status(404).json({ message: "Polygon not found" });
     res.json(polygon);
 });
 
-// POST יצירת פוליגון חדש
+// POST (crate) new polygon
 router.post("/", async (req, res) => {
     const { name, coordinates } = req.body;
     const polygon = new Polygon({ name, coordinates });
@@ -24,7 +24,7 @@ router.post("/", async (req, res) => {
     res.status(201).json(polygon);
 });
 
-// PUT עדכון פוליגון
+// PUT (update) polygon
 router.put("/:id", async (req, res) => {
     const { name, coordinates } = req.body;
     const polygon = await Polygon.findByIdAndUpdate(
@@ -36,7 +36,7 @@ router.put("/:id", async (req, res) => {
     res.json(polygon);
 });
 
-// DELETE מחיקת פוליגון
+// DELETE polygon
 router.delete("/:id", async (req, res) => {
     const polygon = await Polygon.findByIdAndDelete(req.params.id);
     if (!polygon) return res.status(404).json({ message: "Polygon not found" });
