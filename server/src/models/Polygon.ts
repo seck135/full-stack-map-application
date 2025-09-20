@@ -10,14 +10,17 @@ export interface PolygonDocument extends Document {
     coordinates: Coordinate[];
 }
 
-const polygonSchema = new Schema<PolygonDocument>({
-    name: { type: String, required: true },
-    coordinates: [
-        {
-            lat: { type: Number, required: true },
-            lon: { type: Number, required: true }
-        }
-    ]
-});
+const polygonSchema = new Schema<PolygonDocument>(
+    {
+        name: { type: String, required: true },
+        coordinates: [
+            {
+                lat: { type: Number, required: true },
+                lon: { type: Number, required: true }
+            }
+        ]
+    },
+    { versionKey: false }
+);
 
 export const Polygon = model<PolygonDocument>("Polygon", polygonSchema);
