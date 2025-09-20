@@ -11,13 +11,13 @@ const MONGO_URI = process.env.MONGO_URI as string;
 async function startServer() {
     try {
         await mongoose.connect(MONGO_URI);
-        console.log("✅ Connected to MongoDB");
+        console.log("Connected to MongoDB");
 
         app.listen(PORT, () => {
-            console.log(`🚀 Server is running at http://localhost:${PORT}`);
+            console.log(`Server is running at http://localhost:${PORT}`);
         });
     } catch (err) {
-        console.error("❌ Failed to connect to MongoDB:", err);
+        console.error("Failed to connect to MongoDB:", err);
         process.exit(1);
     }
 }
