@@ -33,11 +33,11 @@ const MapEventsHandler: React.FC<{ onMapClick: (latlng: LatLng) => void; drawing
     return null;
 };
 
-const MapPanel: React.FC<MapPanelProps> = ({ polygons, objects, onPolygonClick, onObjectClick, drawingMode, onMapClick, currentDrawing }) => {
+const MapPanel = ({ polygons, objects, onPolygonClick, onObjectClick, drawingMode, onMapClick, currentDrawing }: MapPanelProps) => {
     const mapCenter: LatLng = { lat: 31.7683, lng: 35.2137 };
 
     return (
-        <MapContainer center={[mapCenter.lat, mapCenter.lng]} zoom={13} style={{ height: '100%', width: '100%' }}>
+        <MapContainer className='map-panel' center={[mapCenter.lat, mapCenter.lng]} zoom={13}>
             <TileLayer
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                 attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
