@@ -1,0 +1,112 @@
+.polygon-panel {
+  background-color: #ffffff;
+  border: 0.1rem solid #ccc;
+  border-radius: 8px;
+  padding: 12px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+
+  &--title {
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-bottom: 8px;
+  }
+
+  &__controls {
+    margin-bottom: 12px;
+
+    &__create-btn {
+      background-color: #4caf50;
+      color: white;
+      border: none;
+      padding: 6px 12px;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background-color 0.2s;
+
+      &:hover {
+        background-color: #45a049;
+      }
+    }
+  }
+
+  &__polygon-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+
+    &__item {
+      display: flex;
+      flex-direction: row-reverse;
+      justify-content: space-between;
+      align-items: center;
+      padding: 6px 0;
+      border-bottom: 1px solid #eee;
+
+      &:last-child {
+        border-bottom: none;
+      }
+
+      &--name {
+        font-size: 1rem;
+      }
+
+      &__actions {
+        display: flex;
+        gap: 6px;
+
+        &__edit-btn {
+          background-color: #2196f3;
+          color: white;
+          border: none;
+          padding: 4px 8px;
+          border-radius: 4px;
+          cursor: pointer;
+          transition: background-color 0.2s;
+
+          &:hover {
+            background-color: #1976d2;
+          }
+        }
+
+        &__delete-btn {
+          background-color: #f44336;
+          color: white;
+          border: none;
+          padding: 4px 8px;
+          border-radius: 4px;
+          cursor: pointer;
+          transition: background-color 0.2s;
+
+          &:hover {
+            background-color: #d32f2f;
+          }
+        }
+      }
+    }
+  }
+}
+
+// .polygon-panel {
+//   &--title {
+//   }
+
+//   &__controls {
+//     &__create-btn {
+//     }
+//   }
+
+//   &__polygon-list {
+//     &__item {
+//       &--name {
+//       }
+
+//       &__actions {
+//         &__edit-btn {
+//         }
+
+//         &__delete-btn {
+//         }
+//       }
+//     }
+//   }
+// }

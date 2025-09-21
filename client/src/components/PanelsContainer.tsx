@@ -9,17 +9,19 @@ const PanelsContainer = () => {
     const [objects, setObjects] = useState<ObjectMarker[]>([]);
     const [drawingMode, setDrawingMode] = useState<'polygon' | 'marker' | 'none'>('none');
     const [currentDrawing, setCurrentDrawing] = useState<LatLng[]>([]);
+    const [newName, setNewName] = useState<string>(''); // שם חדש לפוליגון/אובייקט
 
     // לחיצה במפה
     const handleMapClick = (latlng: LatLng) => {
         if (drawingMode === 'marker') {
             const newMarker: ObjectMarker = {
                 id: uuidv4(),
-                name: `Object ${objects.length + 1}`,
+                name: newName || `Object ${objects.length + 1}`,
                 coordinate: latlng,
             };
             setObjects([...objects, newMarker]);
             setDrawingMode('none');
+            setNewName('');
         } else if (drawingMode === 'polygon') {
             setCurrentDrawing((prev) => [...prev, latlng]);
         }
@@ -30,13 +32,14 @@ const PanelsContainer = () => {
         if (currentDrawing.length > 2) {
             const newPolygon: Polygon = {
                 id: uuidv4(),
-                name: `Polygon ${polygons.length + 1}`,
+                name: newName || `Polygon ${polygons.length + 1}`,
                 coordinates: currentDrawing,
             };
             setPolygons([...polygons, newPolygon]);
         }
         setCurrentDrawing([]);
         setDrawingMode('none');
+        setNewName('');
     };
 
     return (
@@ -48,22 +51,35 @@ const PanelsContainer = () => {
                 onObjectClick={(object) => console.log('Object clicked:', object)}
                 onMapClick={handleMapClick}
                 drawingMode={drawingMode}
-                currentDrawing={currentDrawing} // pass current drawing for live polygon
+                currentDrawing={currentDrawing} 
             />
-            <SideBar
-                setDrawingMode={setDrawingMode}
-                handleFinishPolygon={handleFinishPolygon}
-                drawingMode={drawingMode}
-            />
-            {/* <div className="side-bar" style={{ width: '100rem', padding: '20px' }}>
-                <button onClick={() => setDrawingMode('polygon')}>Start Drawing Polygon</button>
-                <button onClick={handleFinishPolygon} disabled={drawingMode !== 'polygon'}>
+
+            <div className="side-bar" style={{ width: '25rem', padding: '20px' }}>
+                <input
+                    type="text"
+                    placeholder="Enter name"
+                    value={newName}
+                    onChange={(e) => setNewName(e.target.value)}
+                    style={{ width: '100%', marginBottom: '10px', padding: '6px', borderRadius: '4px', border: '1px solid #ccc' }}
+                />
+
+                <button onClick={() => setDrawingMode('polygon')} style={{ marginBottom: '8px' }}>
+                    Start Drawing Polygon
+                </button>
+                <button onClick={handleFinishPolygon} disabled={drawingMode !== 'polygon'} style={{ marginBottom: '8px' }}>
                     Finish Polygon
                 </button>
                 <button onClick={() => setDrawingMode('marker')}>Add Marker</button>
-            </div> */}
+            </div>
         </div>
     );
-}
+}   
 
 export default PanelsContainer;
+
+
+{/* <SideBar
+                setDrawingMode={setDrawingMode}
+                handleFinishPolygon={handleFinishPolygon}
+                drawingMode={drawingMode}
+            /> */}
