@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import type { LatLng, ObjectMarker, Polygon } from '../types/types';
 import MapPanel from './map/MapPanel';
-
+import SideBar from './SideBar';
 
 const PanelsContainer = () => {
     const [polygons, setPolygons] = useState<Polygon[]>([]);
@@ -50,13 +50,18 @@ const PanelsContainer = () => {
                 drawingMode={drawingMode}
                 currentDrawing={currentDrawing} // pass current drawing for live polygon
             />
-            <div style={{ width: '100rem', padding: '20px' }}>
+            <SideBar
+                setDrawingMode={setDrawingMode}
+                handleFinishPolygon={handleFinishPolygon}
+                drawingMode={drawingMode}
+            />
+            {/* <div className="side-bar" style={{ width: '100rem', padding: '20px' }}>
                 <button onClick={() => setDrawingMode('polygon')}>Start Drawing Polygon</button>
                 <button onClick={handleFinishPolygon} disabled={drawingMode !== 'polygon'}>
                     Finish Polygon
                 </button>
                 <button onClick={() => setDrawingMode('marker')}>Add Marker</button>
-            </div>
+            </div> */}
         </div>
     );
 }
