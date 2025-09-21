@@ -1,6 +1,6 @@
+import { Popover } from 'antd';
 import { useState } from 'react';
 import type { LatLng, Polygon } from '../../types/types';
-import { Popover } from 'antd';
 
 
 interface PolygonPanelProps {
@@ -30,6 +30,7 @@ const PolygonPanel = ({ setDrawingMode, handleFinishPolygon, polygons, newPolygo
             <h2 className="polygon-panel--title">ניהול פוליגונים 🗺️</h2>
 
             <div className="polygon-panel__controls">
+                <span className='polygon-panel__controls--description'>צור פוליגון חדש :</span>
                 <input
                     type="text"
                     placeholder="הזן שם פוליגון"
@@ -41,6 +42,7 @@ const PolygonPanel = ({ setDrawingMode, handleFinishPolygon, polygons, newPolygo
                     content="נא להזין שם פוליגון"
                     trigger={['hover']}
                     placement="top"
+                    open={isNewPolygonNameEmpty ? undefined : false}
                 >
                     <span className='popover-btn-wrapper'>
                         <button
@@ -57,6 +59,7 @@ const PolygonPanel = ({ setDrawingMode, handleFinishPolygon, polygons, newPolygo
                     content="נא לסמן פוליגון"
                     trigger={['hover']}
                     placement="top"
+                     open={!isThereCoordinates ? undefined : false}
                 >
                     <span className='popover-btn-wrapper'>
                         <button

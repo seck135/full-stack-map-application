@@ -24,6 +24,13 @@
 
         $padding-top-bottom: 0.6rem;
 
+        &--description {
+            align-self: center;
+            color: #333;
+            font-size: 2rem;
+            font-weight: bold;
+        }
+
         &__input {
             width: 20rem;
             padding: $padding-top-bottom 0.8rem;
