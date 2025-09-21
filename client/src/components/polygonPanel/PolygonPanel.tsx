@@ -39,12 +39,11 @@ const PolygonPanel = ({ setDrawingMode, handleFinishPolygon, polygons, newPolygo
                     className="polygon-panel__controls__input"
                 />
                 <Popover
-                    content="נא להזין שם פוליגון"
-                    trigger={['hover']}
+                    content={isNewPolygonNameEmpty ? "😕 נא להזין שם פוליגון" : "😊 מוכן לסימון קורדינטות"}
+                    trigger="hover"
                     placement="top"
-                    open={isNewPolygonNameEmpty ? undefined : false}
                 >
-                    <span className='popover-btn-wrapper'>
+                    <span>
                         <button
                             disabled={isNewPolygonNameEmpty}
                             className="polygon-panel__controls__btn polygon-panel__controls__mark-coordinates-btn"
@@ -56,12 +55,11 @@ const PolygonPanel = ({ setDrawingMode, handleFinishPolygon, polygons, newPolygo
                 </Popover>
 
                 <Popover
-                    content="נא לסמן פוליגון"
-                    trigger={['hover']}
+                    content={!isThereCoordinates ? "😕 נא לסמן פוליגון" : "😊 הכל מוכן לשמירה"}
+                    trigger="hover"
                     placement="top"
-                     open={!isThereCoordinates ? undefined : false}
                 >
-                    <span className='popover-btn-wrapper'>
+                    <span>
                         <button
                             disabled={!isThereCoordinates}
                             className="polygon-panel__controls__btn polygon-panel__controls__create-btn"
@@ -71,6 +69,9 @@ const PolygonPanel = ({ setDrawingMode, handleFinishPolygon, polygons, newPolygo
                         </button>
                     </span>
                 </Popover>
+
+
+
             </div>
 
             <ul className="polygon-panel__polygon-list">

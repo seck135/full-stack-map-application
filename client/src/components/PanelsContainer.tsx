@@ -61,23 +61,7 @@ const PanelsContainer = () => {
                 newPolygonCoordinates={newPolygonCoordinates}
             />
 
-            <div className="side-bar" style={{ width: '25rem', padding: '20px' }}>
-                <input
-                    type="text"
-                    placeholder="Enter name"
-                    value={newName}
-                    onChange={(e) => setNewName(e.target.value)}
-                    style={{ width: '100%', marginBottom: '10px', padding: '6px', borderRadius: '4px', border: '1px solid #ccc' }}
-                />
-
-                {/* <button onClick={() => setDrawingMode('polygon')} style={{ marginBottom: '8px' }}>
-                    Start Drawing Polygon
-                </button> */}
-                {/* <button onClick={handleFinishPolygon} disabled={drawingMode !== 'polygon'} style={{ marginBottom: '8px' }}>
-                    Finish Polygon
-                </button> */}
-                <button onClick={() => setDrawingMode('marker')}>Add Marker</button>
-            </div>
+            
         </div>
     );
 }   
