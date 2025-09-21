@@ -1,112 +1,145 @@
 .polygon-panel {
-  background-color: #ffffff;
-  border: 0.1rem solid #ccc;
-  border-radius: 8px;
-  padding: 12px;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    direction: rtl;
 
-  &--title {
-    font-size: 1.2rem;
-    font-weight: bold;
-    margin-bottom: 8px;
-  }
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 1.5rem;
 
-  &__controls {
-    margin-bottom: 12px;
+    padding: 1.6rem;
 
-    &__create-btn {
-      background-color: #4caf50;
-      color: white;
-      border: none;
-      padding: 6px 12px;
-      border-radius: 4px;
-      cursor: pointer;
-      transition: background-color 0.2s;
+    border: 0.1rem solid #ccc;
+    border-radius: 0.9rem;
+    box-shadow: 0 0.2rem 0.6rem rgba(0, 0, 0, 0.1);
 
-      &:hover {
-        background-color: #45a049;
-      }
+
+    &--title {
+        font-size: 2.5rem;
+        font-weight: bold;
     }
-  }
 
-  &__polygon-list {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-
-    &__item {
-      display: flex;
-      flex-direction: row-reverse;
-      justify-content: space-between;
-      align-items: center;
-      padding: 6px 0;
-      border-bottom: 1px solid #eee;
-
-      &:last-child {
-        border-bottom: none;
-      }
-
-      &--name {
-        font-size: 1rem;
-      }
-
-      &__actions {
+    &__controls {
         display: flex;
-        gap: 6px;
+        gap: 1.9rem;
+        margin-bottom: 1.6rem;
 
-        &__edit-btn {
-          background-color: #2196f3;
-          color: white;
-          border: none;
-          padding: 4px 8px;
-          border-radius: 4px;
-          cursor: pointer;
-          transition: background-color 0.2s;
+        $padding-top-bottom: 0.6rem;
 
-          &:hover {
-            background-color: #1976d2;
-          }
+        &__input {
+            width: 20rem;
+            padding: $padding-top-bottom 0.8rem;
+
+            border-radius: 0.4rem;
+            border: 0.2rem solid #ccc;
+            font-size: 2rem;
+            outline: none;
         }
 
-        &__delete-btn {
-          background-color: #f44336;
-          color: white;
-          border: none;
-          padding: 4px 8px;
-          border-radius: 4px;
-          cursor: pointer;
-          transition: background-color 0.2s;
+        &__btn {
+            padding: $padding-top-bottom 1.2rem;
 
-          &:hover {
-            background-color: #d32f2f;
-          }
+            color: #fff;
+            border: none;
+            border-radius: 0.4rem;
+            cursor: pointer;
+            transition: background-color 0.2s, transform 0.1s;
+
+            &:active {
+                transform: scale(0.98);
+            }
         }
-      }
+
+        &__mark-coordinates-btn {
+            background-color: #008cba;
+
+            &:hover {
+                background-color: #007bb5;
+            }
+
+            &:active {
+                background-color: #006a99;
+            }
+        }
+
+        &__create-btn {
+            background-color: #4caf50;
+
+            &:hover {
+                background-color: #45a049;
+            }
+
+            &:active {
+                background-color: #3e8e41;
+            }
+        }
     }
-  }
+
+    &__polygon-list {
+        display: flex;
+        flex-direction: column;
+        overflow-y: auto;
+
+        // FIX scroll-bar
+        height: 20rem;
+
+        &__item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.6rem 0;
+            border-bottom: 0.1rem solid #eee;
+
+            &:last-child {
+                border-bottom: none;
+            }
+
+            &--name {
+                font-size: 2rem;
+            }
+
+            &__actions {
+                display: flex;
+                gap: 0.6rem;
+
+                $buttons-padding: 0.4rem 0.8rem;
+
+                &__btn {
+                    color: #fff;
+                    border: none;
+                    padding: $buttons-padding;
+                    border-radius: 0.4rem;
+                    cursor: pointer;
+                    transition: background-color 0.2s, transform 0.1s;
+
+                    &:active {
+                        transform: scale(0.98);
+                    }
+                }
+
+                &__edit-btn {
+                    background-color: #2196f3;
+
+                    &:hover {
+                        background-color: #1976d2;
+                    }
+
+                    &:active {
+                        background-color: #1565c0;
+                    }
+                }
+
+                &__delete-btn {
+                    background-color: #f44336;
+
+                    &:hover {
+                        background-color: #d32f2f;
+                    }
+
+                    &:active {
+                        background-color: #b71c1c;
+                    }
+                }
+            }
+        }
+    }
 }
-
-// .polygon-panel {
-//   &--title {
-//   }
-
-//   &__controls {
-//     &__create-btn {
-//     }
-//   }
-
-//   &__polygon-list {
-//     &__item {
-//       &--name {
-//       }
-
-//       &__actions {
-//         &__edit-btn {
-//         }
-
-//         &__delete-btn {
-//         }
-//       }
-//     }
-//   }
-// }

@@ -54,6 +54,12 @@ const PanelsContainer = () => {
                 currentDrawing={currentDrawing} 
             />
 
+            <SideBar
+                setDrawingMode={setDrawingMode}
+                handleFinishPolygon={handleFinishPolygon}
+                drawingMode={drawingMode}
+            />
+
             <div className="side-bar" style={{ width: '25rem', padding: '20px' }}>
                 <input
                     type="text"
@@ -78,8 +84,3 @@ const PanelsContainer = () => {
 export default PanelsContainer;
 
 
-{/* <SideBar
-                setDrawingMode={setDrawingMode}
-                handleFinishPolygon={handleFinishPolygon}
-                drawingMode={drawingMode}
-            /> */}
