@@ -1,8 +1,7 @@
-// App.tsx
 import React, { useState } from 'react';
 import MapPanel from './components/map/MapPanel';
 import type { Polygon, ObjectMarker, LatLng } from './types/types';
-import { v4 as uuidv4 } from 'uuid'; // Don't forget to install uuid: npm install uuid @types/uuid
+import { v4 as uuidv4 } from 'uuid';
 
 const App: React.FC = () => {
     const [polygons, setPolygons] = useState<Polygon[]>([]);
@@ -10,6 +9,7 @@ const App: React.FC = () => {
     const [drawingMode, setDrawingMode] = useState<'polygon' | 'marker' | 'none'>('none');
     const [currentDrawing, setCurrentDrawing] = useState<LatLng[]>([]);
 
+    // לחיצה במפה
     const handleMapClick = (latlng: LatLng) => {
         if (drawingMode === 'marker') {
             const newMarker: ObjectMarker = {
@@ -18,14 +18,13 @@ const App: React.FC = () => {
                 coordinate: latlng,
             };
             setObjects([...objects, newMarker]);
-            setDrawingMode('none'); // Exit drawing mode after placing marker
-        }
-        if (drawingMode === 'polygon') {
+            setDrawingMode('none');
+        } else if (drawingMode === 'polygon') {
             setCurrentDrawing((prev) => [...prev, latlng]);
-            // This is just for adding points. You'll need a button to "finish" the polygon.
         }
     };
 
+    // סיום פוליגון
     const handleFinishPolygon = () => {
         if (currentDrawing.length > 2) {
             const newPolygon: Polygon = {
@@ -39,30 +38,20 @@ const App: React.FC = () => {
         setDrawingMode('none');
     };
 
-    const handlePolygonClick = (polygon: Polygon) => {
-        console.log('Polygon clicked:', polygon.name);
-        // Implement logic to edit polygon here, e.g., show a popup with options.
-    };
-
-    const handleObjectClick = (object: ObjectMarker) => {
-        console.log('Object clicked:', object.name);
-        // Implement logic to edit object here.
-    };
-
     return (
         <div style={{ display: 'flex', height: '100vh' }}>
             <div style={{ flex: 1 }}>
                 <MapPanel
                     polygons={polygons}
                     objects={objects}
-                    onPolygonClick={handlePolygonClick}
-                    onObjectClick={handleObjectClick}
+                    onPolygonClick={(polygon) => console.log('Polygon clicked:', polygon)}
+                    onObjectClick={(object) => console.log('Object clicked:', object)}
                     onMapClick={handleMapClick}
                     drawingMode={drawingMode}
+                    currentDrawing={currentDrawing} // pass current drawing for live polygon
                 />
             </div>
-            {/* These are placeholder buttons for demonstration. In your actual UI, they will be in the control panels */}
-            <div style={{ width: '30%', padding: '20px' }}>
+            <div style={{ width: '300px', padding: '20px' }}>
                 <button onClick={() => setDrawingMode('polygon')}>Start Drawing Polygon</button>
                 <button onClick={handleFinishPolygon} disabled={drawingMode !== 'polygon'}>
                     Finish Polygon
