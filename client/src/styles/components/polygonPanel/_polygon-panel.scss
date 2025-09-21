@@ -52,6 +52,17 @@
             &:active {
                 transform: scale(0.98);
             }
+
+            &:disabled {
+                background-color: #ccc;
+                cursor: not-allowed;
+
+                &:hover,
+                &:active {
+                    background-color: #ccc; // נשאר אותו צבע
+                }
+            }
+
         }
 
         &__mark-coordinates-btn {
@@ -84,8 +95,11 @@
         flex-direction: column;
         overflow-y: auto;
 
-        // FIX scroll-bar
         height: 20rem;
+
+        padding-left: 1rem;
+
+        @include special_scroller-settings;
 
         &__item {
             display: flex;
@@ -104,7 +118,7 @@
 
             &__actions {
                 display: flex;
-                gap: 0.6rem;
+                gap: 1rem;
 
                 $buttons-padding: 0.4rem 0.8rem;
 

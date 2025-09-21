@@ -1,17 +1,24 @@
 import { useState } from 'react';
-import type { Polygon } from '../../types/types';
+import type { LatLng, Polygon } from '../../types/types';
 import { Popover } from 'antd';
 
 
 interface PolygonPanelProps {
     setDrawingMode: React.Dispatch<React.SetStateAction<"polygon" | "marker" | "none">>
     handleFinishPolygon: (polygonName: string) => void
-    drawingMode: "polygon" | "marker" | "none"
     polygons: Polygon[]
+    newPolygonCoordinates: LatLng[]
 }
 
-const PolygonPanel = ({ setDrawingMode, handleFinishPolygon, drawingMode, polygons }: PolygonPanelProps) => {
+const PolygonPanel = ({ setDrawingMode, handleFinishPolygon, polygons, newPolygonCoordinates }: PolygonPanelProps) => {
     const [newPolygonName, setNewPolygonName] = useState('');
+    // const [currentDrawing, setCurrentDrawing] = useState<LatLng[]>([]);
+
+    const isNewPolygonNameEmpty = newPolygonName.trim().length === 0;
+    const isThereCoordinates = newPolygonCoordinates.length > 2;
+    console.log("isNewPolygonNameEmpty", isNewPolygonNameEmpty);
+    console.log("isThereCoordinates", isThereCoordinates, newPolygonCoordinates);
+
 
     const handleSavePolygon = () => {
         handleFinishPolygon(newPolygonName);
@@ -30,25 +37,34 @@ const PolygonPanel = ({ setDrawingMode, handleFinishPolygon, drawingMode, polygo
                     onChange={(e) => setNewPolygonName(e.target.value)}
                     className="polygon-panel__controls__input"
                 />
-                <button
-                    className='polygon-panel__controls__btn polygon-panel__controls__mark-coordinates-btn'
-                    onClick={() => setDrawingMode('polygon')}>
-                    סמן פוליגון
-                </button>
                 <Popover
-                    content="! חייב להזין שם פוליגון"
-                    trigger="hover"
+                    content="נא להזין שם פוליגון"
+                    trigger={['hover']} // שים לב לשימוש במערך
                     placement="top"
-                    open={newPolygonName.trim().length === 0 ? undefined : false}
+                    open={isNewPolygonNameEmpty ? undefined : false}
                 >
                     <button
+                        disabled={isNewPolygonNameEmpty}
+                        className={'polygon-panel__controls__btn polygon-panel__controls__mark-coordinates-btn'}
+                        onClick={() => setDrawingMode('polygon')}>
+                        סמן פוליגון
+                    </button>
+                </Popover>
+                <Popover
+                    content="נא לסמן פוליגון"
+                    trigger={['hover']} // שים לב לשימוש במערך
+                    placement="top"
+                    open={!isThereCoordinates ? undefined : false}
+                >
+                    <button
+                        disabled={!isThereCoordinates}
                         className="polygon-panel__controls__btn polygon-panel__controls__create-btn"
                         onClick={handleSavePolygon}
-                        disabled={newPolygonName.trim().length === 0} // אופציונלי, אם תרצה לחסום לחיצה
                     >
                         שמור
                     </button>
                 </Popover>
+
             </div>
 
             <ul className="polygon-panel__polygon-list">

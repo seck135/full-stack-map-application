@@ -8,9 +8,9 @@ const PanelsContainer = () => {
     const [polygons, setPolygons] = useState<Polygon[]>([]);
     const [objects, setObjects] = useState<ObjectMarker[]>([]);
     const [drawingMode, setDrawingMode] = useState<'polygon' | 'marker' | 'none'>('none');
-    const [currentDrawing, setCurrentDrawing] = useState<LatLng[]>([]);
+    const [newPolygonCoordinates, setNewPolygonCoordinates] = useState<LatLng[]>([]);
     const [newName, setNewName] = useState<string>(''); // שם חדש לפוליגון/אובייקט
-
+    
     // לחיצה במפה
     const handleMapClick = (latlng: LatLng) => {
         if (drawingMode === 'marker') {
@@ -23,21 +23,21 @@ const PanelsContainer = () => {
             setDrawingMode('none');
             // setNewName('');
         } else if (drawingMode === 'polygon') {
-            setCurrentDrawing((prev) => [...prev, latlng]);
+            setNewPolygonCoordinates((prev) => [...prev, latlng]);
         }
     };
 
     // סיום פוליגון
     const handleFinishPolygon = (polygonName: string) => {
-        if (currentDrawing.length > 2) {
+        if (newPolygonCoordinates.length > 2) {
             const newPolygon: Polygon = {
                 id: uuidv4(),
                 name: polygonName || `Polygon ${polygons.length + 1}`,
-                coordinates: currentDrawing,
+                coordinates: newPolygonCoordinates,
             };
             setPolygons([...polygons, newPolygon]);
         }
-        setCurrentDrawing([]);
+        setNewPolygonCoordinates([]);
         setDrawingMode('none');
         // setNewName('');
     };
@@ -51,14 +51,14 @@ const PanelsContainer = () => {
                 onObjectClick={(object) => console.log('Object clicked:', object)}
                 onMapClick={handleMapClick}
                 drawingMode={drawingMode}
-                currentDrawing={currentDrawing} 
+                newPolygonCoordinates={newPolygonCoordinates}
             />
 
             <SideBar
                 setDrawingMode={setDrawingMode}
                 handleFinishPolygon={handleFinishPolygon}
-                drawingMode={drawingMode}
                 polygons={polygons}
+                newPolygonCoordinates={newPolygonCoordinates}
             />
 
             <div className="side-bar" style={{ width: '25rem', padding: '20px' }}>

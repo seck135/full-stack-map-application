@@ -19,7 +19,7 @@ interface MapPanelProps {
     onObjectClick: (object: ObjectMarker) => void;
     onMapClick: (latlng: LatLng) => void;
     drawingMode: 'polygon' | 'marker' | 'none';
-    currentDrawing: LatLng[];
+    newPolygonCoordinates: LatLng[];
 }
 
 const MapEventsHandler: React.FC<{ onMapClick: (latlng: LatLng) => void; drawingMode: 'polygon' | 'marker' | 'none' }> = ({ onMapClick, drawingMode }) => {
@@ -33,7 +33,7 @@ const MapEventsHandler: React.FC<{ onMapClick: (latlng: LatLng) => void; drawing
     return null;
 };
 
-const MapPanel = ({ polygons, objects, onPolygonClick, onObjectClick, drawingMode, onMapClick, currentDrawing }: MapPanelProps) => {
+const MapPanel = ({ polygons, objects, onPolygonClick, onObjectClick, drawingMode, onMapClick, newPolygonCoordinates }: MapPanelProps) => {
     const mapCenter: LatLng = { lat: 31.7683, lng: 35.2137 };
 
     return (
@@ -57,9 +57,9 @@ const MapPanel = ({ polygons, objects, onPolygonClick, onObjectClick, drawingMod
             ))}
 
             {/* Polygon שנבחר עכשיו */}
-            {drawingMode === 'polygon' && currentDrawing.length > 0 && (
+            {drawingMode === 'polygon' && newPolygonCoordinates.length > 0 && (
                 <Polyline
-                    positions={currentDrawing.map((coord) => [coord.lat, coord.lng])}
+                    positions={newPolygonCoordinates.map((coord) => [coord.lat, coord.lng])}
                     pathOptions={{ color: 'red', dashArray: '5,10' }}
                 />
             )}
