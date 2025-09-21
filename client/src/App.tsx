@@ -3,7 +3,7 @@ import MapPanel from './components/map/MapPanel';
 import type { Polygon, ObjectMarker, LatLng } from './types/types';
 import { v4 as uuidv4 } from 'uuid';
 
-const App: React.FC = () => {
+const App = () => {
     const [polygons, setPolygons] = useState<Polygon[]>([]);
     const [objects, setObjects] = useState<ObjectMarker[]>([]);
     const [drawingMode, setDrawingMode] = useState<'polygon' | 'marker' | 'none'>('none');
@@ -51,7 +51,7 @@ const App: React.FC = () => {
                     currentDrawing={currentDrawing} // pass current drawing for live polygon
                 />
             </div>
-            <div style={{ width: '300px', padding: '20px' }}>
+            <div style={{ width: '100rem', padding: '20px' }}>
                 <button onClick={() => setDrawingMode('polygon')}>Start Drawing Polygon</button>
                 <button onClick={handleFinishPolygon} disabled={drawingMode !== 'polygon'}>
                     Finish Polygon
