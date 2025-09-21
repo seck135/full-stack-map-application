@@ -1,25 +1,22 @@
 import { useState } from 'react';
+import type { Polygon } from '../../types/types';
+import { Popover } from 'antd';
 
-// Dummy data
-const dummyPolygons = [
-    { id: 'poly1', name: 'פוליגון א׳' },
-    { id: 'poly2', name: 'פוליגון ב׳' },
-    { id: 'poly3', name: 'פוליגון ג׳' }
-];
 
-const PolygonPanel = () => {
+interface PolygonPanelProps {
+    setDrawingMode: React.Dispatch<React.SetStateAction<"polygon" | "marker" | "none">>
+    handleFinishPolygon: (polygonName: string) => void
+    drawingMode: "polygon" | "marker" | "none"
+    polygons: Polygon[]
+}
+
+const PolygonPanel = ({ setDrawingMode, handleFinishPolygon, drawingMode, polygons }: PolygonPanelProps) => {
     const [newPolygonName, setNewPolygonName] = useState('');
-    const [polygons, setPolygons] = useState(dummyPolygons);
 
-    const handleCreatePolygon = () => {
-        if (!newPolygonName.trim()) return;
-        const newPoly = {
-            id: `poly${polygons.length + 1}`,
-            name: newPolygonName
-        };
-        setPolygons([...polygons, newPoly]);
+    const handleSavePolygon = () => {
+        handleFinishPolygon(newPolygonName);
         setNewPolygonName('');
-    };
+    }
 
     return (
         <div className="polygon-panel">
@@ -28,25 +25,30 @@ const PolygonPanel = () => {
             <div className="polygon-panel__controls">
                 <input
                     type="text"
-                    placeholder="הזן שם לפוליגון"
+                    placeholder="הזן שם פוליגון"
                     value={newPolygonName}
                     onChange={(e) => setNewPolygonName(e.target.value)}
                     className="polygon-panel__controls__input"
                 />
                 <button
                     className='polygon-panel__controls__btn polygon-panel__controls__mark-coordinates-btn'
-                    onClick={() => {
-                        // setDrawingMode('polygon')
-                        console.log("zibi");
-                    }}>
+                    onClick={() => setDrawingMode('polygon')}>
                     סמן פוליגון
                 </button>
-                <button
-                    className="polygon-panel__controls__btn polygon-panel__controls__create-btn"
-                    onClick={handleCreatePolygon}
+                <Popover
+                    content="! חייב להזין שם פוליגון"
+                    trigger="hover"
+                    placement="top"
+                    open={newPolygonName.trim().length === 0 ? undefined : false}
                 >
-                    שמור
-                </button>
+                    <button
+                        className="polygon-panel__controls__btn polygon-panel__controls__create-btn"
+                        onClick={handleSavePolygon}
+                        disabled={newPolygonName.trim().length === 0} // אופציונלי, אם תרצה לחסום לחיצה
+                    >
+                        שמור
+                    </button>
+                </Popover>
             </div>
 
             <ul className="polygon-panel__polygon-list">

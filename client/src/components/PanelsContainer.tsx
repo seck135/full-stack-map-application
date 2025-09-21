@@ -21,25 +21,25 @@ const PanelsContainer = () => {
             };
             setObjects([...objects, newMarker]);
             setDrawingMode('none');
-            setNewName('');
+            // setNewName('');
         } else if (drawingMode === 'polygon') {
             setCurrentDrawing((prev) => [...prev, latlng]);
         }
     };
 
     // סיום פוליגון
-    const handleFinishPolygon = () => {
+    const handleFinishPolygon = (polygonName: string) => {
         if (currentDrawing.length > 2) {
             const newPolygon: Polygon = {
                 id: uuidv4(),
-                name: newName || `Polygon ${polygons.length + 1}`,
+                name: polygonName || `Polygon ${polygons.length + 1}`,
                 coordinates: currentDrawing,
             };
             setPolygons([...polygons, newPolygon]);
         }
         setCurrentDrawing([]);
         setDrawingMode('none');
-        setNewName('');
+        // setNewName('');
     };
 
     return (
@@ -58,6 +58,7 @@ const PanelsContainer = () => {
                 setDrawingMode={setDrawingMode}
                 handleFinishPolygon={handleFinishPolygon}
                 drawingMode={drawingMode}
+                polygons={polygons}
             />
 
             <div className="side-bar" style={{ width: '25rem', padding: '20px' }}>
@@ -69,12 +70,12 @@ const PanelsContainer = () => {
                     style={{ width: '100%', marginBottom: '10px', padding: '6px', borderRadius: '4px', border: '1px solid #ccc' }}
                 />
 
-                <button onClick={() => setDrawingMode('polygon')} style={{ marginBottom: '8px' }}>
+                {/* <button onClick={() => setDrawingMode('polygon')} style={{ marginBottom: '8px' }}>
                     Start Drawing Polygon
-                </button>
-                <button onClick={handleFinishPolygon} disabled={drawingMode !== 'polygon'} style={{ marginBottom: '8px' }}>
+                </button> */}
+                {/* <button onClick={handleFinishPolygon} disabled={drawingMode !== 'polygon'} style={{ marginBottom: '8px' }}>
                     Finish Polygon
-                </button>
+                </button> */}
                 <button onClick={() => setDrawingMode('marker')}>Add Marker</button>
             </div>
         </div>
