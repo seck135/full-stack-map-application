@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
-import MapPanel from './components/map/MapPanel';
-import type { Polygon, ObjectMarker, LatLng } from './types/types';
+import { useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
+import MapPanel from './components/map/MapPanel';
+import type { LatLng, ObjectMarker, Polygon } from './types/types';
 
 const App = () => {
     const [polygons, setPolygons] = useState<Polygon[]>([]);
