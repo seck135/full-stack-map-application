@@ -39,32 +39,35 @@ const PolygonPanel = ({ setDrawingMode, handleFinishPolygon, polygons, newPolygo
                 />
                 <Popover
                     content="נא להזין שם פוליגון"
-                    trigger={['hover']} // שים לב לשימוש במערך
+                    trigger={['hover']}
                     placement="top"
-                    open={isNewPolygonNameEmpty ? undefined : false}
                 >
-                    <button
-                        disabled={isNewPolygonNameEmpty}
-                        className={'polygon-panel__controls__btn polygon-panel__controls__mark-coordinates-btn'}
-                        onClick={() => setDrawingMode('polygon')}>
-                        סמן פוליגון
-                    </button>
-                </Popover>
-                <Popover
-                    content="נא לסמן פוליגון"
-                    trigger={['hover']} // שים לב לשימוש במערך
-                    placement="top"
-                    open={!isThereCoordinates ? undefined : false}
-                >
-                    <button
-                        disabled={!isThereCoordinates}
-                        className="polygon-panel__controls__btn polygon-panel__controls__create-btn"
-                        onClick={handleSavePolygon}
-                    >
-                        שמור
-                    </button>
+                    <span className='popover-btn-wrapper'>
+                        <button
+                            disabled={isNewPolygonNameEmpty}
+                            className="polygon-panel__controls__btn polygon-panel__controls__mark-coordinates-btn"
+                            onClick={() => setDrawingMode('polygon')}
+                        >
+                            סמן פוליגון
+                        </button>
+                    </span>
                 </Popover>
 
+                <Popover
+                    content="נא לסמן פוליגון"
+                    trigger={['hover']}
+                    placement="top"
+                >
+                    <span className='popover-btn-wrapper'>
+                        <button
+                            disabled={!isThereCoordinates}
+                            className="polygon-panel__controls__btn polygon-panel__controls__create-btn"
+                            onClick={handleSavePolygon}
+                        >
+                            שמור
+                        </button>
+                    </span>
+                </Popover>
             </div>
 
             <ul className="polygon-panel__polygon-list">
