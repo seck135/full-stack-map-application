@@ -17,21 +17,13 @@ const PanelsContainer = () => {
     const [objects, setObjects] = useState<ObjectMarker[]>([]);
     const [drawingMode, setDrawingMode] = useState<'polygon' | 'marker' | 'none'>('none');
     const [newPolygonCoordinates, setNewPolygonCoordinates] = useState<Coordinate[]>([]);
-    const [newName, setNewName] = useState<string>(''); // שם חדש לפוליגון/אובייקט
-
+    const [newObjectCoordinate, setNewObjectCoordinate] = useState<Coordinate | null>(null);
+    console.log("newObjectCoordinate: ", newObjectCoordinate);
+    
     // לחיצה במפה
     const handleMapClick = (coordinate: Coordinate) => {
-        console.log("handleMapClick");
-
         if (drawingMode === 'marker') {
-            const newMarker: ObjectMarker = {
-                id: uuidv4(),
-                name: newName || `Object ${objects.length + 1}`,
-                coordinate: coordinate,
-            };
-            setObjects([...objects, newMarker]);
-            setDrawingMode('none');
-            // setNewName('');
+            setNewObjectCoordinate(coordinate);
         } else if (drawingMode === 'polygon') {
             setNewPolygonCoordinates((prev) => [...prev, coordinate]);
         }

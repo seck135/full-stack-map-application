@@ -1,4 +1,5 @@
 import type { Coordinate, IPolygonCreate } from "../types/types"
+import ObjectPanel from "./objectsPanel/ObjectPanel";
 import type { Mode } from "./PanelsContainer";
 import PolygonPanel from "./polygonPanel/PolygonPanel"
 
@@ -16,10 +17,15 @@ const SideBar = ({ setDrawingMode, handleFinishPolygon, newPolygonCoordinates }:
                 setDrawingMode={setDrawingMode}
                 newPolygonCoordinates={newPolygonCoordinates}
             />
+            <ObjectPanel
+                setDrawingMode={setDrawingMode}
+                newPolygonCoordinates={newPolygonCoordinates}
+            />
             {/* <button onClick={() => setDrawingMode('polygon')}>Start Drawing Polygon</button> */}
             {/* <button onClick={handleFinishPolygon} disabled={drawingMode !== 'polygon'}>
                 Finish Polygon
             </button> */}
+
             <button onClick={() => setDrawingMode('marker')}>Add Marker</button>
         </div>
     )
