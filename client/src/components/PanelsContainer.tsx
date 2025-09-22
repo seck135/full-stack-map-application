@@ -21,7 +21,7 @@ const PanelsContainer = () => {
     const [drawingMode, setDrawingMode] = useState<'polygon' | 'marker' | 'none'>('none');
     const [newPolygonCoordinates, setNewPolygonCoordinates] = useState<Coordinate[]>([]);
     const [newObjectCoordinate, setNewObjectCoordinate] = useState<Coordinate | null>(null);
-    
+
     // לחיצה במפה
     const handleMapClick = (coordinate: Coordinate) => {
         if (drawingMode === 'marker') {
@@ -102,7 +102,10 @@ const PanelsContainer = () => {
                 onObjectClick={(object) => console.log('Object clicked:', object)}
                 onMapClick={handleMapClick}
                 drawingMode={drawingMode}
-                newPolygonCoordinates={newPolygonCoordinates}
+                editedPointsToDisplay={[
+                    ...newPolygonCoordinates,
+                    ...(newObjectCoordinate ? [newObjectCoordinate] : [])
+                ]}
             />
 
             <SideBar

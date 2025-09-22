@@ -1,8 +1,23 @@
-import React from 'react';
-import { MapContainer, TileLayer, Marker, Popup, Polygon as LeafletPolygon, useMapEvents, Polyline } from 'react-leaflet';
-import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
-import type { Polygon, ObjectMarker, Coordinate } from '../../types/types';
+import 'leaflet/dist/leaflet.css';
+import { Polygon as LeafletPolygon, MapContainer, Marker, Polyline, Popup, TileLayer, useMapEvents } from 'react-leaflet';
+import type { Coordinate, ObjectMarker, Polygon } from '../../types/types';
+import { redIcon } from './icons';
+
+interface MapPanelProps {
+    polygons: Polygon[];
+    objects: ObjectMarker[];
+    onPolygonClick: (polygon: Polygon) => void;
+    onObjectClick: (object: ObjectMarker) => void;
+    onMapClick: (coordinate: Coordinate) => void;
+    drawingMode: 'polygon' | 'marker' | 'none';
+    editedPointsToDisplay: Coordinate[];
+}
+
+type MapEventsHandlerProps = {
+    onMapClick: (latlng: Coordinate) => void;
+    drawingMode: 'polygon' | 'marker' | 'none';
+};
 
 // תיקון אייקון ברירת מחדל
 delete (L.Icon.Default.prototype as any)._getIconUrl;
@@ -12,17 +27,8 @@ L.Icon.Default.mergeOptions({
     shadowUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-shadow.png',
 });
 
-interface MapPanelProps {
-    polygons: Polygon[];
-    objects: ObjectMarker[];
-    onPolygonClick: (polygon: Polygon) => void;
-    onObjectClick: (object: ObjectMarker) => void;
-    onMapClick: (coordinate: Coordinate) => void;
-    drawingMode: 'polygon' | 'marker' | 'none';
-    newPolygonCoordinates: Coordinate[];
-}
 
-const MapEventsHandler: React.FC<{ onMapClick: (latlng: Coordinate) => void; drawingMode: 'polygon' | 'marker' | 'none' }> = ({ onMapClick, drawingMode }) => {
+function MapEventsHandler({ onMapClick, drawingMode }: MapEventsHandlerProps) {
     useMapEvents({
         click(e) {
             if (drawingMode === 'marker' || drawingMode === 'polygon') {
@@ -30,10 +36,19 @@ const MapEventsHandler: React.FC<{ onMapClick: (latlng: Coordinate) => void; dra
             }
         },
     });
-    return null;
-};
 
-const MapPanel = ({ polygons, objects, onPolygonClick, onObjectClick, drawingMode, onMapClick, newPolygonCoordinates }: MapPanelProps) => {
+    return null;
+}
+
+const MapPanel = ({
+    polygons,
+    objects,
+    onPolygonClick,
+    onObjectClick,
+    drawingMode,
+    onMapClick,
+    editedPointsToDisplay,
+}: MapPanelProps) => {
     const mapCenter: Coordinate = { lat: 31.7683, lon: 35.2137 };
 
     return (
@@ -57,12 +72,24 @@ const MapPanel = ({ polygons, objects, onPolygonClick, onObjectClick, drawingMod
             ))}
 
             {/* Polygon שנבחר עכשיו */}
-            {drawingMode === 'polygon' && newPolygonCoordinates.length > 0 && (
+            {drawingMode !== 'polygon' && editedPointsToDisplay.length > 0 && (
                 <Polyline
-                    positions={newPolygonCoordinates.map((coord) => [coord.lat, coord.lon])}
+                    positions={editedPointsToDisplay.map((coord) => [coord.lat, coord.lon])}
                     pathOptions={{ color: 'red', dashArray: '5,10' }}
                 />
             )}
+
+            {/* Show points while drawing */}
+            {drawingMode !== 'none' &&
+                editedPointsToDisplay.map((coord, index) => (
+                    <Marker
+                        key={`temp-${index}`}
+                        position={[coord.lat, coord.lon]}
+                        icon={redIcon}
+                    >
+                        <Popup>Point {index + 1}</Popup>
+                    </Marker>
+                ))}
 
             {/* Object Marker */}
             {objects.map((obj) => (
