@@ -75,7 +75,7 @@ const PolygonPanel = ({ setDrawingMode, handleSavePolygon, newPolygonCoordinates
                 >
                     <span>
                         <button
-                            disabled={!isThereCoordinates || isNewPolygonNameEmpty }
+                            disabled={!isThereCoordinates || isNewPolygonNameEmpty}
                             className="polygon-panel__controls__btn polygon-panel__controls__create-btn"
                             onClick={handleCreatePolygon}
                         >
@@ -87,11 +87,11 @@ const PolygonPanel = ({ setDrawingMode, handleSavePolygon, newPolygonCoordinates
             </div>
 
             <ul className="polygon-panel__polygon-list">
-                {(polygons?.reverse() ?? []).map(polygon => {
+                {([...(polygons ?? [])].reverse()).map(polygon => {
                     const isPolygonToEdit = polygonToEdit?.id === polygon.id;
                     return (
                         <PolygonListItem
-                        key={polygon.id}
+                            key={polygon.id}
                             polygon={polygon}
                             isPolygonToEdit={isPolygonToEdit}
                             setDrawingMode={setDrawingMode}

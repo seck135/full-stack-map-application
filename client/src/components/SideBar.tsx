@@ -8,9 +8,10 @@ interface SideBarProps {
     handleSavePolygon: ({ polygonToSave, mode }: { polygonToSave: IPolygonCreate; mode: Mode; }) => void
     handleSaveObjectMarker: ({ objectToSave, mode }: { objectToSave: IObjectCreate; mode: Mode; }) => void
     newPolygonCoordinates: Coordinate[]
+    newObjectCoordinate: Coordinate | null
 }
 
-const SideBar = ({ setDrawingMode, handleSavePolygon, handleSaveObjectMarker, newPolygonCoordinates }: SideBarProps) => {
+const SideBar = ({ setDrawingMode, handleSavePolygon, handleSaveObjectMarker, newPolygonCoordinates, newObjectCoordinate }: SideBarProps) => {
     return (
         <div className="side-bar" >
             <PolygonPanel
@@ -21,6 +22,7 @@ const SideBar = ({ setDrawingMode, handleSavePolygon, handleSaveObjectMarker, ne
             <ObjectPanel
                 handleSaveObjectMarker={handleSaveObjectMarker}
                 setDrawingMode={setDrawingMode}
+                newObjectCoordinate={newObjectCoordinate}
             />
             {/* <button onClick={() => setDrawingMode('polygon')}>Start Drawing Polygon</button> */}
             {/* <button onClick={handleFinishPolygon} disabled={drawingMode !== 'polygon'}>

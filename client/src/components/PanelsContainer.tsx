@@ -21,7 +21,6 @@ const PanelsContainer = () => {
     const [drawingMode, setDrawingMode] = useState<'polygon' | 'marker' | 'none'>('none');
     const [newPolygonCoordinates, setNewPolygonCoordinates] = useState<Coordinate[]>([]);
     const [newObjectCoordinate, setNewObjectCoordinate] = useState<Coordinate | null>(null);
-    console.log("newObjectCoordinate", newObjectCoordinate);
     
     // לחיצה במפה
     const handleMapClick = (coordinate: Coordinate) => {
@@ -32,7 +31,6 @@ const PanelsContainer = () => {
         }
     };
 
-    // סיום פוליגון
     const handleSavePolygon = ({ polygonToSave, mode }: { polygonToSave: IPolygonCreate, mode: Mode }) => {
         const polygonData: IPolygonCreate = {
             name: polygonToSave.name,
@@ -63,7 +61,6 @@ const PanelsContainer = () => {
         }
     };
 
-    // סיום פוליגון
     const handleSaveObjectMarker = ({ objectToSave, mode }: { objectToSave: IObjectCreate, mode: Mode }) => {
         const objectData: IObjectCreate = {
             name: objectToSave.name,
@@ -113,6 +110,7 @@ const PanelsContainer = () => {
                 handleSavePolygon={handleSavePolygon}
                 handleSaveObjectMarker={handleSaveObjectMarker}
                 newPolygonCoordinates={newPolygonCoordinates}
+                newObjectCoordinate={newObjectCoordinate}
             />
         </div>
     );

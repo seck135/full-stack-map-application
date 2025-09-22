@@ -1,7 +1,7 @@
 import { Popover } from 'antd';
 import { useState } from 'react';
 import { useObjects } from '../../api/queries/objects';
-import type { IObjectCreate, ObjectMarker } from '../../types/types';
+import type { Coordinate, IObjectCreate, ObjectMarker } from '../../types/types';
 import type { Mode } from '../PanelsContainer';
 import ObjectListItem from './ObjectListItem';
 
@@ -9,13 +9,38 @@ import ObjectListItem from './ObjectListItem';
 interface ObjectPanelProps {
     handleSaveObjectMarker: ({ objectToSave, mode }: { objectToSave: IObjectCreate; mode: Mode; }) => void
     setDrawingMode: React.Dispatch<React.SetStateAction<"polygon" | "marker" | "none">>
+    newObjectCoordinate: Coordinate | null
 }
 
-const ObjectPanel = ({ setDrawingMode, handleSaveObjectMarker }: ObjectPanelProps) => {
+const ObjectPanel = ({ setDrawingMode, handleSaveObjectMarker, newObjectCoordinate }: ObjectPanelProps) => {
     const { data: objects } = useObjects();
 
     const [newObjectName, setNewObjectName] = useState('');
     const [objectMarkerToEdit, setObjectMarkerToEdit] = useState<ObjectMarker | null>(null);
+
+    const isNewObjectNameEmpty = newObjectName.trim().length === 0;
+    const isThereCoordinates = newObjectCoordinate !== null;
+
+    const handleCreateObjectMarker = () => {
+        const objectMarkerToSave: IObjectCreate = {
+            name: newObjectName,
+            lat: newObjectCoordinate!.lat,
+            lon: newObjectCoordinate!.lon,
+        }
+        handleSaveObjectMarker({ objectToSave: objectMarkerToSave, mode: { type: "create" } });
+        setNewObjectName('');
+    }
+
+    const handleSaveEditedObject = ({ newNameToUpdate }: { newNameToUpdate: string }) => {
+        const objectMarkerToSave: IObjectCreate = {
+            name: newNameToUpdate,
+            lat: newObjectCoordinate ? newObjectCoordinate!.lat : objectMarkerToEdit?.lat!,
+            lon: newObjectCoordinate ? newObjectCoordinate!.lon : objectMarkerToEdit?.lon!,
+        }
+        handleSaveObjectMarker({ objectToSave: objectMarkerToSave, mode: { type: "update", id: objectMarkerToEdit!.id } });
+        setObjectMarkerToEdit(null);
+    }
+
 
     return (
         <div className="polygon-panel">
@@ -31,13 +56,13 @@ const ObjectPanel = ({ setDrawingMode, handleSaveObjectMarker }: ObjectPanelProp
                     className="polygon-panel__controls__input"
                 />
                 <Popover
-                    content={true ? "😕 נא להזין שם אובייקט" : "😊 מוכן לסימון קורדינטה"}
+                    content={isNewObjectNameEmpty ? "😕 נא להזין שם אובייקט" : "😊 מוכן לסימון קורדינטה"}
                     trigger="hover"
                     placement="top"
                 >
                     <span>
                         <button
-                            disabled={false}
+                            disabled={isNewObjectNameEmpty}
                             className="polygon-panel__controls__btn polygon-panel__controls__mark-coordinates-btn"
                             onClick={() => setDrawingMode('marker')}
                         >
@@ -47,15 +72,15 @@ const ObjectPanel = ({ setDrawingMode, handleSaveObjectMarker }: ObjectPanelProp
                 </Popover>
 
                 <Popover
-                    content={(false) ? "😕 נא לסמן אובייקט" : "😊 הכל מוכן לשמירה"}
+                    content={(!isThereCoordinates || isNewObjectNameEmpty) ? "😕 נא לסמן אובייקט" : "😊 הכל מוכן לשמירה"}
                     trigger="hover"
                     placement="top"
                 >
                     <span>
                         <button
-                            disabled={false}
+                            disabled={!isThereCoordinates || isNewObjectNameEmpty}
                             className="polygon-panel__controls__btn polygon-panel__controls__create-btn"
-                        // onClick={handleCreatePolygon}
+                            onClick={handleCreateObjectMarker}
                         >
                             שמור
                         </button>
@@ -65,7 +90,7 @@ const ObjectPanel = ({ setDrawingMode, handleSaveObjectMarker }: ObjectPanelProp
             </div>
 
             <ul className="polygon-panel__polygon-list">
-                {(objects?.reverse() ?? []).map(objectMarker => {
+                {([...(objects ?? [])].reverse()).map(objectMarker => {
                     const isPolygonToEdit = objectMarkerToEdit?.id === objectMarker.id;
                     return (
                         <ObjectListItem
@@ -73,8 +98,8 @@ const ObjectPanel = ({ setDrawingMode, handleSaveObjectMarker }: ObjectPanelProp
                             objectMarker={objectMarker}
                             isPolygonToEdit={isPolygonToEdit}
                             setDrawingMode={setDrawingMode}
-                            handleSaveEditedPolygon={() => console.log("")}
-                            setPolygonToEdit={setObjectMarkerToEdit}
+                            handleSaveEditedObject={handleSaveEditedObject}
+                            setObjectMarkerToEdit={setObjectMarkerToEdit}
                         />
                     )
                 })}
