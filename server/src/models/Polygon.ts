@@ -20,7 +20,17 @@ const polygonSchema = new Schema<PolygonDocument>(
             }
         ]
     },
-    { collection: "polygons", versionKey: false }
+    {
+        collection: "polygons",
+        versionKey: false,
+        toJSON: {
+            virtuals: true, // include virtuals
+            transform: (_, ret) => {
+                ret.id = ret._id; // copy _id to id
+                delete ret._id;   // remove _id
+            },
+        },
+    }
 );
 
 export const Polygon = model<PolygonDocument>("Polygon", polygonSchema);

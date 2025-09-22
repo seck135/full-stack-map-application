@@ -3,14 +3,20 @@ export interface LatLng {
     lng: number;
 }
 
-export interface Polygon {
-    id: string;
+export interface IPolygonCreate {
     name: string;
     coordinates: LatLng[];
 }
 
-export interface ObjectMarker {
-    id: string;
+export interface IObjectCreate {
     name: string;
     coordinate: LatLng;
+}
+
+export interface Polygon extends IPolygonCreate {
+    id: string;
+}
+
+export interface ObjectMarker extends IObjectCreate {
+    id: string;
 }
