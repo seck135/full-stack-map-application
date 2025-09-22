@@ -1,20 +1,20 @@
 import { Popover } from 'antd';
 import { useState } from 'react';
-import { usePolygons } from '../../api/queries/polygons';
-import type { Coordinate, Polygon } from '../../types/types';
+import { useObjects } from '../../api/queries/objects';
+import type { Coordinate, ObjectMarker } from '../../types/types';
 import ObjectListItem from './ObjectListItem';
 
 
-interface PolygonPanelProps {
+interface ObjectPanelProps {
     setDrawingMode: React.Dispatch<React.SetStateAction<"polygon" | "marker" | "none">>
     newPolygonCoordinates: Coordinate[]
 }
 
-const ObjectPanel = ({ setDrawingMode }: PolygonPanelProps) => {
-    const { data: polygons } = usePolygons();
+const ObjectPanel = ({ setDrawingMode }: ObjectPanelProps) => {
+    const { data: objects } = useObjects();
 
-    const [newPolygonName, setNewPolygonName] = useState('');
-    const [polygonToEdit, setPolygonToEdit] = useState<Polygon | null>(null);
+    const [newObjectName, setNewObjectName] = useState('');
+    const [objectMarkerToEdit, setObjectMarkerToEdit] = useState<ObjectMarker | null>(null);
 
     return (
         <div className="polygon-panel">
@@ -25,8 +25,8 @@ const ObjectPanel = ({ setDrawingMode }: PolygonPanelProps) => {
                 <input
                     type="text"
                     placeholder="הזן שם אובייקט"
-                    value={newPolygonName}
-                    onChange={(e) => setNewPolygonName(e.target.value)}
+                    value={newObjectName}
+                    onChange={(e) => setNewObjectName(e.target.value)}
                     className="polygon-panel__controls__input"
                 />
                 <Popover
@@ -64,15 +64,15 @@ const ObjectPanel = ({ setDrawingMode }: PolygonPanelProps) => {
             </div>
 
             <ul className="polygon-panel__polygon-list">
-                {(polygons?.reverse() ?? []).map(polygon => {
-                    const isPolygonToEdit = polygonToEdit?.id === polygon.id;
+                {(objects?.reverse() ?? []).map(objectMarker => {
+                    const isPolygonToEdit = objectMarkerToEdit?.id === objectMarker.id;
                     return (
                         <ObjectListItem
-                            polygon={polygon}
+                            objectMarker={objectMarker}
                             isPolygonToEdit={isPolygonToEdit}
                             setDrawingMode={setDrawingMode}
                             handleSaveEditedPolygon={() => console.log("")}
-                            setPolygonToEdit={setPolygonToEdit}
+                            setPolygonToEdit={setObjectMarkerToEdit}
                         />
                     )
                 })}

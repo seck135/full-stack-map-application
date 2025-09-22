@@ -35,12 +35,15 @@ const PolygonListItem = ({ polygon, isPolygonToEdit, setDrawingMode, handleSaveE
                         : "polygon-list-item__update-coordinates-btn--disabled")}
                 onClick={() => setDrawingMode('polygon')}
             >
-                {"לחץ כדי לעדכן קורדינות"}
+                {"לחץ כדי לעדכן קורדינטות"}
             </button>
             <div className="polygon-list-item__actions">
                 <button
                     className="polygon-list-item__actions__btn polygon-list-item__actions__edit-btn"
-                    onClick={() => isPolygonToEdit ? handleSaveEditedPolygon({ newNameToUpdate: editedPoltgonName }) : setPolygonToEdit(polygon)}
+                    onClick={() =>
+                        isPolygonToEdit
+                            ? handleSaveEditedPolygon({ newNameToUpdate: editedPoltgonName })
+                            : setPolygonToEdit(polygon)}
                 >
                     {isPolygonToEdit ? "שמור" : "ערוך"}
                 </button>

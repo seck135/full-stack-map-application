@@ -1,23 +1,23 @@
-import { useState } from "react";
-import type { Polygon } from "../../types/types";
 import classNames from "classnames";
+import { useState } from "react";
 import { useDeletePolygon } from "../../api/queries/polygons";
+import type { ObjectMarker } from "../../types/types";
 
 interface ObjectListItemProps {
-    polygon: Polygon
+    objectMarker: ObjectMarker
     isPolygonToEdit: boolean
     setDrawingMode: React.Dispatch<React.SetStateAction<"polygon" | "marker" | "none">>
     handleSaveEditedPolygon: ({ newNameToUpdate }: { newNameToUpdate: string; }) => void
-    setPolygonToEdit: React.Dispatch<React.SetStateAction<Polygon | null>>
+    setPolygonToEdit: React.Dispatch<React.SetStateAction<ObjectMarker | null>>
 }
 
-const ObjectListItem = ({ polygon, isPolygonToEdit, setDrawingMode, handleSaveEditedPolygon, setPolygonToEdit }: ObjectListItemProps) => {
+const ObjectListItem = ({ objectMarker, isPolygonToEdit, setDrawingMode, handleSaveEditedPolygon, setPolygonToEdit }: ObjectListItemProps) => {
     const deletePolygon = useDeletePolygon();
 
-    const [editedPoltgonName, setEditedPolygonName] = useState(polygon.name);
+    const [editedPoltgonName, setEditedPolygonName] = useState(objectMarker.name);
 
     return (
-        <li key={polygon.id} className="polygon-list-item">
+        <li key={objectMarker.id} className="polygon-list-item">
             {
                 isPolygonToEdit ?
                     <input
@@ -27,7 +27,7 @@ const ObjectListItem = ({ polygon, isPolygonToEdit, setDrawingMode, handleSaveEd
                         onChange={(e) => setEditedPolygonName(e.target.value)}
                         className="polygon-list-item--input"
                     />
-                    : <span className="polygon-list-item--name">{polygon.name}</span>
+                    : <span className="polygon-list-item--name">{objectMarker.name}</span>
             }
             <button
                 className={classNames("polygon-list-item__update-coordinates-btn",
@@ -35,17 +35,20 @@ const ObjectListItem = ({ polygon, isPolygonToEdit, setDrawingMode, handleSaveEd
                         : "polygon-list-item__update-coordinates-btn--disabled")}
                 onClick={() => setDrawingMode('polygon')}
             >
-                {"לחץ כדי לעדכן קורדינטה"}
+                {"לחץ כדי לעדכן מיקום"}
             </button>
             <div className="polygon-list-item__actions">
                 <button
                     className="polygon-list-item__actions__btn polygon-list-item__actions__edit-btn"
-                    onClick={() => isPolygonToEdit ? handleSaveEditedPolygon({ newNameToUpdate: editedPoltgonName }) : setPolygonToEdit(polygon)}
+                    onClick={() =>
+                        isPolygonToEdit
+                            ? handleSaveEditedPolygon({ newNameToUpdate: editedPoltgonName })
+                            : setPolygonToEdit(objectMarker)}
                 >
                     {isPolygonToEdit ? "שמור" : "ערוך"}
                 </button>
                 <button
-                    onClick={() => deletePolygon.mutate(polygon.id)}
+                    onClick={() => deletePolygon.mutate(objectMarker.id)}
                     disabled={deletePolygon.isPending}
                     className="polygon-list-item__actions__btn polygon-list-item__actions__delete-btn">
                     {deletePolygon.isPending ? "מוחק..." : "מחק"}
