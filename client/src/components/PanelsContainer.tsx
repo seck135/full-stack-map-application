@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { v4 as uuidv4 } from 'uuid';
 import { useCreatePolygon, usePolygons, useUpdatePolygon } from '../api/queries/polygons';
 import type { Coordinate, IPolygonCreate, ObjectMarker } from '../types/types';
 import MapPanel from './map/MapPanel';
