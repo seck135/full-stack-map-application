@@ -1,4 +1,4 @@
-.polygon-panel {
+.management-panel {
     direction: rtl;
 
     display: flex;
@@ -107,7 +107,5 @@
         padding-left: 1rem;
 
         @include special_scroller-settings;
-
-        
     }
 }

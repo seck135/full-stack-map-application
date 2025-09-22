@@ -12,8 +12,6 @@
 // Components/mapPanel
 @import './components/mapPanel/map-panel';
 
-// Components/polygonPanel
-@import './components/polygonPanel/polygon-panel';
-
 // Components/managementPanel
-@import './components/managementPanel/polygon-list-item';
+@import './components/managementPanel/management-panel';
+@import './components/managementPanel/list-item';

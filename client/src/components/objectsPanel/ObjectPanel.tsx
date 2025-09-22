@@ -47,17 +47,17 @@ const ObjectPanel = ({ handleSaveObjectMarker }: ObjectPanelProps) => {
 
 
     return (
-        <div className="polygon-panel">
-            <h2 className="polygon-panel--title">ניהול אובייקטים 🗺️</h2>
+        <div className="management-panel">
+            <h2 className="management-panel--title">ניהול אובייקטים 🗺️</h2>
 
-            <div className="polygon-panel__controls">
-                <span className='polygon-panel__controls--description'>צור אובייקט חדש :</span>
+            <div className="management-panel__controls">
+                <span className='management-panel__controls--description'>צור אובייקט חדש :</span>
                 <input
                     type="text"
                     placeholder="הזן שם אובייקט"
                     value={newObjectName}
                     onChange={(e) => setNewObjectName(e.target.value)}
-                    className="polygon-panel__controls__input"
+                    className="management-panel__controls__input"
                 />
                 <Popover
                     content={isNewObjectNameEmpty ? "😕 נא להזין שם אובייקט" : "😊 מוכן לסימון קורדינטה"}
@@ -67,7 +67,7 @@ const ObjectPanel = ({ handleSaveObjectMarker }: ObjectPanelProps) => {
                     <span>
                         <button
                             disabled={isNewObjectNameEmpty}
-                            className="polygon-panel__controls__btn polygon-panel__controls__mark-coordinates-btn"
+                            className="management-panel__controls__btn management-panel__controls__mark-coordinates-btn"
                             onClick={() => dispatch(setDrawingMode('marker'))}
                         >
                             סמן אובייקט
@@ -89,7 +89,7 @@ const ObjectPanel = ({ handleSaveObjectMarker }: ObjectPanelProps) => {
                     <span>
                         <button
                             disabled={!isThereCoordinate || isNewObjectNameEmpty}
-                            className="polygon-panel__controls__btn polygon-panel__controls__create-btn"
+                            className="management-panel__controls__btn management-panel__controls__create-btn"
                             onClick={handleCreateObjectMarker}
                         >
                             שמור
@@ -99,7 +99,7 @@ const ObjectPanel = ({ handleSaveObjectMarker }: ObjectPanelProps) => {
 
             </div>
 
-            <ul className="polygon-panel__polygon-list">
+            <ul className="management-panel__polygon-list">
                 {([...(objects ?? [])].reverse()).map(objectMarker => {
                     const isObjectToEdit = objectMarkerToEdit?.id === objectMarker.id;
                     return (

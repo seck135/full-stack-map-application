@@ -45,17 +45,17 @@ const PolygonPanel = ({ handleSavePolygon, }: PolygonPanelProps) => {
     }
 
     return (
-        <div className="polygon-panel">
-            <h2 className="polygon-panel--title">ניהול פוליגונים 🗺️</h2>
+        <div className="management-panel">
+            <h2 className="management-panel--title">ניהול פוליגונים 🗺️</h2>
 
-            <div className="polygon-panel__controls">
-                <span className='polygon-panel__controls--description'>צור פוליגון חדש :</span>
+            <div className="management-panel__controls">
+                <span className='management-panel__controls--description'>צור פוליגון חדש :</span>
                 <input
                     type="text"
                     placeholder="הזן שם פוליגון"
                     value={newPolygonName}
                     onChange={(e) => setNewPolygonName(e.target.value)}
-                    className="polygon-panel__controls__input"
+                    className="management-panel__controls__input"
                 />
                 <Popover
                     content={isNewPolygonNameEmpty ? "😕 נא להזין שם פוליגון" : "😊 מוכן לסימון קורדינטות"}
@@ -65,7 +65,7 @@ const PolygonPanel = ({ handleSavePolygon, }: PolygonPanelProps) => {
                     <span>
                         <button
                             disabled={isNewPolygonNameEmpty}
-                            className="polygon-panel__controls__btn polygon-panel__controls__mark-coordinates-btn"
+                            className="management-panel__controls__btn management-panel__controls__mark-coordinates-btn"
                             onClick={() => dispatch(setDrawingMode('polygon'))}
                         >
                             סמן פוליגון
@@ -87,7 +87,7 @@ const PolygonPanel = ({ handleSavePolygon, }: PolygonPanelProps) => {
                     <span>
                         <button
                             disabled={!isThereCoordinates || isNewPolygonNameEmpty}
-                            className="polygon-panel__controls__btn polygon-panel__controls__create-btn"
+                            className="management-panel__controls__btn management-panel__controls__create-btn"
                             onClick={handleCreatePolygon}
                         >
                             שמור
@@ -97,7 +97,7 @@ const PolygonPanel = ({ handleSavePolygon, }: PolygonPanelProps) => {
 
             </div>
 
-            <ul className="polygon-panel__polygon-list">
+            <ul className="management-panel__polygon-list">
                 {([...(polygons ?? [])].reverse()).map(polygon => {
                     const isPolygonToEdit = polygonToEdit?.id === polygon.id;
                     return (
