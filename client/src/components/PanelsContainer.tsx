@@ -1,6 +1,7 @@
 import { useState } from 'react';
+import { useCreateObject, useObjects, useUpdateObject } from '../api/queries/objects';
 import { useCreatePolygon, usePolygons, useUpdatePolygon } from '../api/queries/polygons';
-import type { Coordinate, IPolygonCreate, ObjectMarker } from '../types/types';
+import type { Coordinate, IObjectCreate, IPolygonCreate } from '../types/types';
 import MapPanel from './map/MapPanel';
 import SideBar from './SideBar';
 
@@ -9,15 +10,18 @@ export type Mode =
     | { type: "update"; id: string };
 
 const PanelsContainer = () => {
-    const { data: polygons, isLoading, error } = usePolygons();
+    const { data: polygons, isLoading: polygonsIsLoading, error: polygonsError } = usePolygons();
+    const { data: objects, isLoading: objectsIsLoading, error: objectsError } = useObjects();
     const createPolygon = useCreatePolygon();
     const updatePolygon = useUpdatePolygon();
+    const createObject = useCreateObject();
+    const updateObject = useUpdateObject();
 
-    const [objects, setObjects] = useState<ObjectMarker[]>([]);
+    // const [objects, setObjects] = useState<ObjectMarker[]>([]);
     const [drawingMode, setDrawingMode] = useState<'polygon' | 'marker' | 'none'>('none');
     const [newPolygonCoordinates, setNewPolygonCoordinates] = useState<Coordinate[]>([]);
     const [newObjectCoordinate, setNewObjectCoordinate] = useState<Coordinate | null>(null);
-    console.log("newObjectCoordinate: ", newObjectCoordinate);
+    console.log("newObjectCoordinate", newObjectCoordinate);
     
     // לחיצה במפה
     const handleMapClick = (coordinate: Coordinate) => {
@@ -29,7 +33,7 @@ const PanelsContainer = () => {
     };
 
     // סיום פוליגון
-    const handleFinishPolygon = ({ polygonToSave, mode }: { polygonToSave: IPolygonCreate, mode: Mode }) => {
+    const handleSavePolygon = ({ polygonToSave, mode }: { polygonToSave: IPolygonCreate, mode: Mode }) => {
         const polygonData: IPolygonCreate = {
             name: polygonToSave.name,
             coordinates: polygonToSave.coordinates,
@@ -59,6 +63,38 @@ const PanelsContainer = () => {
         }
     };
 
+    // סיום פוליגון
+    const handleSaveObjectMarker = ({ objectToSave, mode }: { objectToSave: IObjectCreate, mode: Mode }) => {
+        const objectData: IObjectCreate = {
+            name: objectToSave.name,
+            lat: objectToSave.lat,
+            lon: objectToSave.lon,
+        };
+
+        if (mode.type === "create") {
+            createObject.mutate(objectData, {
+                onSuccess: (data) => {
+                    console.log("Object created:", data);
+                    setNewObjectCoordinate(null);
+                    setDrawingMode("none");
+                },
+                onError: (err) => console.error("Failed to create object:", err),
+            });
+        } else if (mode.type === "update") {
+            updateObject.mutate(
+                { id: mode.id, objectMarker: objectData },
+                {
+                    onSuccess: (data) => {
+                        console.log("Object updated:", data);
+                        setNewObjectCoordinate(null);
+                        setDrawingMode("none");
+                    },
+                    onError: (err) => console.error("Failed to update object:", err),
+                }
+            );
+        }
+    };
+
 
     return (
         <div className='panels-container'>
@@ -74,7 +110,8 @@ const PanelsContainer = () => {
 
             <SideBar
                 setDrawingMode={setDrawingMode}
-                handleFinishPolygon={handleFinishPolygon}
+                handleSavePolygon={handleSavePolygon}
+                handleSaveObjectMarker={handleSaveObjectMarker}
                 newPolygonCoordinates={newPolygonCoordinates}
             />
         </div>

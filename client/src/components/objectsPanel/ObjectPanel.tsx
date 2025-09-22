@@ -1,16 +1,17 @@
 import { Popover } from 'antd';
 import { useState } from 'react';
 import { useObjects } from '../../api/queries/objects';
-import type { Coordinate, ObjectMarker } from '../../types/types';
+import type { IObjectCreate, ObjectMarker } from '../../types/types';
+import type { Mode } from '../PanelsContainer';
 import ObjectListItem from './ObjectListItem';
 
 
 interface ObjectPanelProps {
+    handleSaveObjectMarker: ({ objectToSave, mode }: { objectToSave: IObjectCreate; mode: Mode; }) => void
     setDrawingMode: React.Dispatch<React.SetStateAction<"polygon" | "marker" | "none">>
-    newPolygonCoordinates: Coordinate[]
 }
 
-const ObjectPanel = ({ setDrawingMode }: ObjectPanelProps) => {
+const ObjectPanel = ({ setDrawingMode, handleSaveObjectMarker }: ObjectPanelProps) => {
     const { data: objects } = useObjects();
 
     const [newObjectName, setNewObjectName] = useState('');
@@ -68,6 +69,7 @@ const ObjectPanel = ({ setDrawingMode }: ObjectPanelProps) => {
                     const isPolygonToEdit = objectMarkerToEdit?.id === objectMarker.id;
                     return (
                         <ObjectListItem
+                            key={objectMarker.id}
                             objectMarker={objectMarker}
                             isPolygonToEdit={isPolygonToEdit}
                             setDrawingMode={setDrawingMode}

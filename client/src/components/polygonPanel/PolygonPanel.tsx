@@ -8,11 +8,11 @@ import PolygonListItem from './PolygonListItem';
 
 interface PolygonPanelProps {
     setDrawingMode: React.Dispatch<React.SetStateAction<"polygon" | "marker" | "none">>
-    handleFinishPolygon: ({ polygonToSave, mode }: { polygonToSave: IPolygonCreate; mode: Mode; }) => void
+    handleSavePolygon: ({ polygonToSave, mode }: { polygonToSave: IPolygonCreate; mode: Mode; }) => void
     newPolygonCoordinates: Coordinate[]
 }
 
-const PolygonPanel = ({ setDrawingMode, handleFinishPolygon, newPolygonCoordinates }: PolygonPanelProps) => {
+const PolygonPanel = ({ setDrawingMode, handleSavePolygon, newPolygonCoordinates }: PolygonPanelProps) => {
     const { data: polygons } = usePolygons();
 
     const [newPolygonName, setNewPolygonName] = useState('');
@@ -26,7 +26,7 @@ const PolygonPanel = ({ setDrawingMode, handleFinishPolygon, newPolygonCoordinat
             name: newPolygonName,
             coordinates: newPolygonCoordinates,
         }
-        handleFinishPolygon({ polygonToSave, mode: { type: "create" } });
+        handleSavePolygon({ polygonToSave, mode: { type: "create" } });
         setNewPolygonName('');
     }
 
@@ -35,7 +35,7 @@ const PolygonPanel = ({ setDrawingMode, handleFinishPolygon, newPolygonCoordinat
             name: newNameToUpdate,
             coordinates: newPolygonCoordinates.length ? newPolygonCoordinates : polygonToEdit?.coordinates!,
         }
-        handleFinishPolygon({ polygonToSave, mode: { type: "update", id: polygonToEdit!.id } });
+        handleSavePolygon({ polygonToSave, mode: { type: "update", id: polygonToEdit!.id } });
         setPolygonToEdit(null);
     }
 
@@ -91,6 +91,7 @@ const PolygonPanel = ({ setDrawingMode, handleFinishPolygon, newPolygonCoordinat
                     const isPolygonToEdit = polygonToEdit?.id === polygon.id;
                     return (
                         <PolygonListItem
+                        key={polygon.id}
                             polygon={polygon}
                             isPolygonToEdit={isPolygonToEdit}
                             setDrawingMode={setDrawingMode}

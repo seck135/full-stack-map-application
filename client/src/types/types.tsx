@@ -8,9 +8,8 @@ export interface IPolygonCreate {
     coordinates: Coordinate[];
 }
 
-export interface IObjectCreate {
+export interface IObjectCreate extends Coordinate {
     name: string;
-    coordinate: Coordinate;
 }
 
 export interface Polygon extends IPolygonCreate {

@@ -68,7 +68,7 @@ const MapPanel = ({ polygons, objects, onPolygonClick, onObjectClick, drawingMod
             {objects.map((obj) => (
                 <Marker
                     key={obj.id}
-                    position={[obj.coordinate.lat, obj.coordinate.lon]}
+                    position={[obj.lat, obj.lon]}
                     eventHandlers={{ click: () => onObjectClick(obj) }}
                 >
                     <Popup>{obj.name}</Popup>
