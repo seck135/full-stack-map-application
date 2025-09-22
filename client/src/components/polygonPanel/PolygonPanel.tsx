@@ -69,7 +69,13 @@ const PolygonPanel = ({ setDrawingMode, handleSavePolygon, newPolygonCoordinates
                 </Popover>
 
                 <Popover
-                    content={(!isThereCoordinates || isNewPolygonNameEmpty) ? "😕 נא לסמן פוליגון" : "😊 הכל מוכן לשמירה"}
+                    content={
+                        (!isThereCoordinates)
+                            ? "😕 נא לסמן לפחות 3 קורדינטות"
+                            : isNewPolygonNameEmpty
+                                ? "😕 נא להזין שם פוליגון"
+                                : "😊 הכל מוכן לשמירה"
+                    }
                     trigger="hover"
                     placement="top"
                 >
@@ -97,6 +103,7 @@ const PolygonPanel = ({ setDrawingMode, handleSavePolygon, newPolygonCoordinates
                             setDrawingMode={setDrawingMode}
                             handleSaveEditedPolygon={handleSaveEditedPolygon}
                             setPolygonToEdit={setPolygonToEdit}
+                            isThereCoordinates={newPolygonCoordinates.length > 2}
                         />
                     )
                 })}

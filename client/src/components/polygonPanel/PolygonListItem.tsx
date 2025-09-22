@@ -2,6 +2,7 @@ import { useState } from "react";
 import type { Polygon } from "../../types/types";
 import classNames from "classnames";
 import { useDeletePolygon } from "../../api/queries/polygons";
+import { Popover } from "antd";
 
 interface PolygonListItemProps {
     polygon: Polygon
@@ -9,12 +10,20 @@ interface PolygonListItemProps {
     setDrawingMode: React.Dispatch<React.SetStateAction<"polygon" | "marker" | "none">>
     handleSaveEditedPolygon: ({ newNameToUpdate }: { newNameToUpdate: string; }) => void
     setPolygonToEdit: React.Dispatch<React.SetStateAction<Polygon | null>>
+    isThereCoordinates: boolean
 }
 
-const PolygonListItem = ({ polygon, isPolygonToEdit, setDrawingMode, handleSaveEditedPolygon, setPolygonToEdit }: PolygonListItemProps) => {
+const PolygonListItem = ({ polygon, isPolygonToEdit, setDrawingMode, handleSaveEditedPolygon, setPolygonToEdit, isThereCoordinates }: PolygonListItemProps) => {
     const deletePolygon = useDeletePolygon();
 
     const [editedPoltgonName, setEditedPolygonName] = useState(polygon.name);
+
+    const isNewPolygonNameEmpty = editedPoltgonName.trim().length === 0;
+
+    if(isPolygonToEdit ) {
+        console.log(!isThereCoordinates || isNewPolygonNameEmpty);
+        
+    }
 
     return (
         <li key={polygon.id} className="list-item">
@@ -40,17 +49,30 @@ const PolygonListItem = ({ polygon, isPolygonToEdit, setDrawingMode, handleSaveE
                 {"לחץ כדי לעדכן קורדינטות"}
             </button>
             <div className="list-item__actions">
-                <button
-                    className={classNames("list-item__actions__btn",
-                        isPolygonToEdit ? "list-item__actions__btn--save" : "list-item__actions__btn--edit"
-                    )}
-                    onClick={() =>
-                        isPolygonToEdit
-                            ? handleSaveEditedPolygon({ newNameToUpdate: editedPoltgonName })
-                            : setPolygonToEdit(polygon)}
+                <Popover
+                    content={
+                        (!isThereCoordinates)
+                            ? "😕 נא לסמן לפחות 3 קורדינטות"
+                            : isNewPolygonNameEmpty
+                                ? "😕 נא להזין שם פוליגון"
+                                : "😊 הכל מוכן לשמירה"
+                    }
+                    trigger="hover"
+                    placement="left"
                 >
-                    {isPolygonToEdit ? "שמור" : "ערוך"}
-                </button>
+                    <button
+                        className={classNames("list-item__actions__btn",
+                            isPolygonToEdit ? "list-item__actions__btn--save" : "list-item__actions__btn--edit"
+                        )}
+                        disabled={isPolygonToEdit && (!isThereCoordinates || isNewPolygonNameEmpty)}
+                        onClick={() =>
+                            isPolygonToEdit
+                                ? handleSaveEditedPolygon({ newNameToUpdate: editedPoltgonName })
+                                : setPolygonToEdit(polygon)}
+                    >
+                        {isPolygonToEdit ? "שמור" : "ערוך"}
+                    </button>
+                </Popover>
                 <button
                     onClick={() => deletePolygon.mutate(polygon.id)}
                     disabled={deletePolygon.isPending}

@@ -19,7 +19,7 @@ const ObjectPanel = ({ setDrawingMode, handleSaveObjectMarker, newObjectCoordina
     const [objectMarkerToEdit, setObjectMarkerToEdit] = useState<ObjectMarker | null>(null);
 
     const isNewObjectNameEmpty = newObjectName.trim().length === 0;
-    const isThereCoordinates = newObjectCoordinate !== null;
+    const isThereCoordinate = newObjectCoordinate !== null;
 
     const handleCreateObjectMarker = () => {
         const objectMarkerToSave: IObjectCreate = {
@@ -72,13 +72,19 @@ const ObjectPanel = ({ setDrawingMode, handleSaveObjectMarker, newObjectCoordina
                 </Popover>
 
                 <Popover
-                    content={(!isThereCoordinates || isNewObjectNameEmpty) ? "😕 נא לסמן אובייקט" : "😊 הכל מוכן לשמירה"}
+                    content={
+                        (!isThereCoordinate)
+                            ? "😕 נא לסמן אובייקט"
+                            : isNewObjectNameEmpty
+                                ? "😕 נא להזין שם אובייקט"
+                                : "😊 הכל מוכן לשמירה"
+                    }
                     trigger="hover"
                     placement="top"
                 >
                     <span>
                         <button
-                            disabled={!isThereCoordinates || isNewObjectNameEmpty}
+                            disabled={!isThereCoordinate || isNewObjectNameEmpty}
                             className="polygon-panel__controls__btn polygon-panel__controls__create-btn"
                             onClick={handleCreateObjectMarker}
                         >

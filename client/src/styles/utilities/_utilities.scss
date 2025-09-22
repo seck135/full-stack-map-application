@@ -1,4 +1,3 @@
-.popover-btn-wrapper {
-    // makes the span wrap the button without affecting layout
-    display: flex;
+.ant-popover-inner {
+    user-select: none;
 }
