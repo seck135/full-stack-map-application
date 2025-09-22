@@ -1,9 +1,9 @@
 import { Popover } from 'antd';
 import { useState } from 'react';
-import { useDeletePolygon, usePolygons } from '../../api/queries/polygons';
+import { usePolygons } from '../../api/queries/polygons';
 import type { Coordinate, IPolygonCreate, Polygon } from '../../types/types';
 import type { Mode } from '../PanelsContainer';
-import classNames from 'classnames';
+import PolygonListItem from './PolygonListItem';
 
 
 interface PolygonPanelProps {
@@ -15,10 +15,8 @@ interface PolygonPanelProps {
 const PolygonPanel = ({ setDrawingMode, handleFinishPolygon, newPolygonCoordinates }: PolygonPanelProps) => {
     const { data: polygons } = usePolygons();
 
-    const deletePolygon = useDeletePolygon();
     const [newPolygonName, setNewPolygonName] = useState('');
     const [polygonToEdit, setPolygonToEdit] = useState<Polygon | null>(null);
-    const [editedPolygonName, setEditedPolygonName] = useState('');
 
     const isNewPolygonNameEmpty = newPolygonName.trim().length === 0;
     const isThereCoordinates = newPolygonCoordinates.length > 2;
@@ -32,10 +30,10 @@ const PolygonPanel = ({ setDrawingMode, handleFinishPolygon, newPolygonCoordinat
         setNewPolygonName('');
     }
 
-    const handleSaveEditedPolygon = () => {
+    const handleSaveEditedPolygon = ({ newNameToUpdate }: { newNameToUpdate: string }) => {
         const polygonToSave = {
-            name: editedPolygonName ? editedPolygonName : polygonToEdit?.name!,
-            coordinates: newPolygonCoordinates ? newPolygonCoordinates : polygonToEdit?.coordinates!,
+            name: newNameToUpdate,
+            coordinates: newPolygonCoordinates.length ? newPolygonCoordinates : polygonToEdit?.coordinates!,
         }
         handleFinishPolygon({ polygonToSave, mode: { type: "update", id: polygonToEdit!.id } });
         setPolygonToEdit(null);
@@ -71,13 +69,13 @@ const PolygonPanel = ({ setDrawingMode, handleFinishPolygon, newPolygonCoordinat
                 </Popover>
 
                 <Popover
-                    content={!isThereCoordinates ? "😕 נא לסמן פוליגון" : "😊 הכל מוכן לשמירה"}
+                    content={(!isThereCoordinates || isNewPolygonNameEmpty) ? "😕 נא לסמן פוליגון" : "😊 הכל מוכן לשמירה"}
                     trigger="hover"
                     placement="top"
                 >
                     <span>
                         <button
-                            disabled={!isThereCoordinates}
+                            disabled={!isThereCoordinates || isNewPolygonNameEmpty }
                             className="polygon-panel__controls__btn polygon-panel__controls__create-btn"
                             onClick={handleCreatePolygon}
                         >
@@ -89,30 +87,16 @@ const PolygonPanel = ({ setDrawingMode, handleFinishPolygon, newPolygonCoordinat
             </div>
 
             <ul className="polygon-panel__polygon-list">
-                {(polygons ?? []).map(polygon => {
+                {(polygons?.reverse() ?? []).map(polygon => {
                     const isPolygonToEdit = polygonToEdit?.id === polygon.id;
                     return (
-                        <li key={polygon.id} className="polygon-panel__polygon-list__item">
-                            <span className="polygon-panel__polygon-list__item--name">{polygon.name}</span>
-                            <button
-                                className={classNames("polygon-panel__polygon-list__item__update-coordinates-btn",
-                                    isPolygonToEdit ? "polygon-panel__polygon-list__item__update-coordinates-btn--active"
-                                        : "polygon-panel__polygon-list__item__update-coordinates-btn--disabled")}
-                                onClick={() => setDrawingMode('polygon')}
-                            >
-                                {"לחץ כדי לעדכן קורדינות"}
-                            </button>
-                            <div className="polygon-panel__polygon-list__item__actions">
-                                <button
-                                    className="polygon-panel__polygon-list__item__actions__btn polygon-panel__polygon-list__item__actions__edit-btn"
-                                    onClick={() => isPolygonToEdit ? handleSaveEditedPolygon() : setPolygonToEdit(polygon)}
-                                >
-                                    {isPolygonToEdit ? "שמור" : "ערוך"}
-                                </button>
-                                <button onClick={() => deletePolygon.mutate(polygon.id)}
-                                    className="polygon-panel__polygon-list__item__actions__btn polygon-panel__polygon-list__item__actions__delete-btn">מחק</button>
-                            </div>
-                        </li>
+                        <PolygonListItem
+                            polygon={polygon}
+                            isPolygonToEdit={isPolygonToEdit}
+                            setDrawingMode={setDrawingMode}
+                            handleSaveEditedPolygon={handleSaveEditedPolygon}
+                            setPolygonToEdit={setPolygonToEdit}
+                        />
                     )
                 })}
             </ul>

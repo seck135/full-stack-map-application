@@ -1,0 +1,106 @@
+.polygon-list-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.6rem 0;
+    border-bottom: 0.1rem solid #eee;
+
+    $buttons-padding: 0.4rem 0.8rem;
+
+    &:last-child {
+        border-bottom: none;
+    }
+
+    &--name {
+        width: 20rem;
+        font-size: 2rem;
+    }
+
+    &--input {
+        width: 20rem;
+        padding: $buttons-padding;
+
+        border-radius: 0.4rem;
+        border: 0.2rem solid #ccc;
+        font-size: 2rem;
+        outline: none;
+        transition: all 0.2s ease-out;
+
+        &:focus {
+            border-color: #008cba;
+            box-shadow: 0 0 5px rgba(0, 140, 186, 0.5);
+        }
+    }
+
+    &__update-coordinates-btn {
+        height: 100%;
+        padding: $buttons-padding;
+        border: none;
+        border-radius: 0.3rem;
+        font-size: 1.8rem;
+        transition: background-color 0.2s, color 0.2s;
+        cursor: pointer;
+
+        // Default style (disabled)
+        &--disabled {
+            background-color: #ccc;
+            color: #666;
+            cursor: not-allowed;
+        }
+
+        // Active style
+        &--active {
+            background-color: #4caf50; // green
+            color: #fff;
+
+            &:hover {
+                background-color: #45a049;
+            }
+        }
+    }
+
+    &__actions {
+        display: flex;
+        gap: 1rem;
+
+
+        &__btn {
+            width: 7rem;
+
+            color: #fff;
+            border: none;
+            padding: $buttons-padding;
+            border-radius: 0.4rem;
+            cursor: pointer;
+            transition: background-color 0.2s, transform 0.1s;
+
+            &:active {
+                transform: scale(0.98);
+            }
+        }
+
+        &__edit-btn {
+            background-color: #2196f3;
+
+            &:hover {
+                background-color: #1976d2;
+            }
+
+            &:active {
+                background-color: #1565c0;
+            }
+        }
+
+        &__delete-btn {
+            background-color: #f44336;
+
+            &:hover {
+                background-color: #d32f2f;
+            }
+
+            &:active {
+                background-color: #b71c1c;
+            }
+        }
+    }
+}
