@@ -109,11 +109,8 @@ const PanelsContainer = () => {
             />
 
             <SideBar
-                // setDrawingMode={setDrawingMode}
                 handleSavePolygon={handleSavePolygon}
                 handleSaveObjectMarker={handleSaveObjectMarker}
-            // polygonDraftCoordinates={polygonDraftCoordinates}
-            // objectDraftCoordinate={objectDraftCoordinate}
             />
         </div>
     );

@@ -21,10 +21,6 @@ const draftCoordinatesSlice = createSlice({
     addPolygonDraftCoordinate(state, action: { payload: Coordinate }) {
       state.polygonDraftCoordinates.push(action.payload);
     },
-    // reset polygonDraftCoordinates
-    resetPolygonDraftCoordinate(state) {
-      state.polygonDraftCoordinates = [];
-    },
     // set object coordinate
     setObjectDraftCoordinate(state, action: PayloadAction<Coordinate>) {
       state.objectDraftCoordinate = action.payload;
@@ -40,7 +36,7 @@ const draftCoordinatesSlice = createSlice({
 
 export const {
   addPolygonDraftCoordinate,
-  resetPolygonDraftCoordinate,
+  // resetPolygonDraftCoordinate,
   setObjectDraftCoordinate,
   setDrawingMode } = draftCoordinatesSlice.actions;
 

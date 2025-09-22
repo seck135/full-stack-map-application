@@ -10,8 +10,6 @@ import PolygonListItem from './PolygonListItem';
 
 
 interface PolygonPanelProps {
-    // setDrawingMode: React.Dispatch<React.SetStateAction<"polygon" | "marker" | "none">>
-    // polygonDraftCoordinates: Coordinate[]
     handleSavePolygon: ({ polygonToSave, mode }: { polygonToSave: IPolygonCreate; mode: Mode; }) => void
 }
 
@@ -107,7 +105,6 @@ const PolygonPanel = ({ handleSavePolygon, }: PolygonPanelProps) => {
                             key={polygon.id}
                             polygon={polygon}
                             isPolygonToEdit={isPolygonToEdit}
-                            // setDrawingMode={setDrawingMode}
                             handleSaveEditedPolygon={handleSaveEditedPolygon}
                             setPolygonToEdit={setPolygonToEdit}
                             isThereCoordinates={polygonDraftCoordinates.length === 0 || polygonDraftCoordinates.length > 2}
