@@ -36,7 +36,6 @@ const draftCoordinatesSlice = createSlice({
 
 export const {
   addPolygonDraftCoordinate,
-  // resetPolygonDraftCoordinate,
   setObjectDraftCoordinate,
   setDrawingMode } = draftCoordinatesSlice.actions;
 

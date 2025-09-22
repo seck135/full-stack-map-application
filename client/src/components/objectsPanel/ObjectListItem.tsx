@@ -4,6 +4,7 @@ import { useDispatch } from "react-redux";
 import { useDeleteObject } from "../../api/queries/objects";
 import { setDrawingMode } from "../../store/draftCoordinatesSlice";
 import type { ObjectMarker } from "../../types/types";
+import PolygonEditSaveButton from "./ObjectEditSaveButton";
 
 interface ObjectListItemProps {
     objectMarker: ObjectMarker
@@ -42,17 +43,14 @@ const ObjectListItem = ({ objectMarker, isObjectToEdit, handleSaveEditedObject, 
                 {"לחץ כדי לעדכן מיקום"}
             </button>
             <div className="list-item__actions">
-                <button
-                    className={classNames("list-item__actions__btn",
-                        isObjectToEdit ? "list-item__actions__btn--save" : "list-item__actions__btn--edit"
-                    )}
-                    onClick={() =>
-                        isObjectToEdit
-                            ? handleSaveEditedObject({ newNameToUpdate: editedObjectName })
-                            : setObjectMarkerToEdit(objectMarker)}
-                >
-                    {isObjectToEdit ? "שמור" : "ערוך"}
-                </button>
+                <PolygonEditSaveButton
+                    isObjectToEdit={isObjectToEdit}
+                    isNewPolygonNameEmpty={editedObjectName.trim().length === 0}
+                    handleSaveEditedObject={handleSaveEditedObject}
+                    setObjectMarkerToEdit={setObjectMarkerToEdit}
+                    objectMarker={objectMarker}
+                    editedObjectName={editedObjectName}
+                />
                 <button
                     onClick={() => deleteObjectMarker.mutate(objectMarker.id)}
                     disabled={deleteObjectMarker.isPending}
