@@ -22,8 +22,8 @@ const PolygonEditSaveButton = ({
 
     const saveOrEditButton = (
         <button
-            className={classNames("list-item__actions__btn",
-                isObjectToEdit ? "list-item__actions__btn--save" : "list-item__actions__btn--edit"
+            className={classNames("save-edit-button",
+                isObjectToEdit ? "save-edit-button--save" : "save-edit-button--edit"
             )}
             disabled={isObjectToEdit && isNewPolygonNameEmpty}
             onClick={() =>

@@ -58,7 +58,7 @@ const PolygonListItem = ({ polygon, isPolygonToEdit, handleSaveEditedPolygon, se
                 <button
                     onClick={() => deletePolygon.mutate(polygon.id)}
                     disabled={deletePolygon.isPending}
-                    className="list-item__actions__btn list-item__actions__delete-btn">
+                    className="save-edit-button list-item__actions__delete-btn">
                     {deletePolygon.isPending ? "מוחק..." : "מחק"}
                 </button>
             </div>

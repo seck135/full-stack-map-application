@@ -1,0 +1,52 @@
+.save-edit-button {
+    width: 7rem;
+
+    color: #fff;
+    border: none;
+    padding: $list-item-buttons-padding;
+    border-radius: 0.4rem;
+    transition: background-color 0.2s, transform 0.1s;
+    cursor: pointer;
+
+    &:active {
+        transform: scale(0.98);
+    }
+
+    &--edit {
+        background-color: #42a5f5;
+        font-weight: 500;
+
+        &:hover {
+            background-color: #1e88e5;
+        }
+
+        &:active {
+            background-color: #1565c0;
+        }
+    }
+
+    &--save {
+        transform: scale(1.03);
+        background-color: #0d47a1;
+        font-weight: bold;
+
+        &:hover {
+            background-color: #1565c0;
+        }
+
+        &:active {
+            background-color: #0b3d91;
+        }
+
+        &:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+
+            &:hover,
+            &:active {
+                background-color: #ccc;
+            }
+        }
+    }
+
+}

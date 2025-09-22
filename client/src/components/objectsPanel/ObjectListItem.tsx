@@ -54,7 +54,7 @@ const ObjectListItem = ({ objectMarker, isObjectToEdit, handleSaveEditedObject, 
                 <button
                     onClick={() => deleteObjectMarker.mutate(objectMarker.id)}
                     disabled={deleteObjectMarker.isPending}
-                    className="list-item__actions__btn list-item__actions__delete-btn">
+                    className="save-edit-button list-item__actions__delete-btn">
                     {deleteObjectMarker.isPending ? "מוחק..." : "מחק"}
                 </button>
             </div>
