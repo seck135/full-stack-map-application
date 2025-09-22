@@ -1,3 +1,8 @@
 .side-bar {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    
     padding: 4rem;
+
 }
