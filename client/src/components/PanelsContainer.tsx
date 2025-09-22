@@ -1,6 +1,8 @@
-import { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useCreateObject, useObjects, useUpdateObject } from '../api/queries/objects';
 import { useCreatePolygon, usePolygons, useUpdatePolygon } from '../api/queries/polygons';
+import type { RootState } from '../store';
+import { addPolygonDraftCoordinate, setDrawingMode, setObjectDraftCoordinate } from '../store/draftCoordinatesSlice';
 import type { Coordinate, IObjectCreate, IPolygonCreate } from '../types/types';
 import MapPanel from './map/MapPanel';
 import SideBar from './SideBar';
@@ -10,6 +12,8 @@ export type Mode =
     | { type: "update"; id: string };
 
 const PanelsContainer = () => {
+    const dispatch = useDispatch()
+
     const { data: polygons, isLoading: polygonsIsLoading, error: polygonsError } = usePolygons();
     const { data: objects, isLoading: objectsIsLoading, error: objectsError } = useObjects();
     const createPolygon = useCreatePolygon();
@@ -17,17 +21,17 @@ const PanelsContainer = () => {
     const createObject = useCreateObject();
     const updateObject = useUpdateObject();
 
-    // const [objects, setObjects] = useState<ObjectMarker[]>([]);
-    const [drawingMode, setDrawingMode] = useState<'polygon' | 'marker' | 'none'>('none');
-    const [newPolygonCoordinates, setNewPolygonCoordinates] = useState<Coordinate[]>([]);
-    const [newObjectCoordinate, setNewObjectCoordinate] = useState<Coordinate | null>(null);
+    const { drawingMode, polygonDraftCoordinates, objectDraftCoordinate } = useSelector((state: RootState) => state.draftCoordinates);
 
-    // לחיצה במפה
+    // Click on map handler
     const handleMapClick = (coordinate: Coordinate) => {
         if (drawingMode === 'marker') {
-            setNewObjectCoordinate(coordinate);
+            setObjectDraftCoordinate(coordinate);
+            dispatch(setObjectDraftCoordinate(coordinate));
+
         } else if (drawingMode === 'polygon') {
-            setNewPolygonCoordinates((prev) => [...prev, coordinate]);
+            // setPolygonDraftCoordinates((prev) => [...prev, coordinate]);
+            dispatch(addPolygonDraftCoordinate(coordinate))
         }
     };
 
@@ -41,8 +45,7 @@ const PanelsContainer = () => {
             createPolygon.mutate(polygonData, {
                 onSuccess: (data) => {
                     console.log("Polygon created:", data);
-                    setNewPolygonCoordinates([]);
-                    setDrawingMode("none");
+                    dispatch(setDrawingMode("none"))
                 },
                 onError: (err) => console.error("Failed to create polygon:", err),
             });
@@ -52,8 +55,7 @@ const PanelsContainer = () => {
                 {
                     onSuccess: (data) => {
                         console.log("Polygon updated:", data);
-                        setNewPolygonCoordinates([]);
-                        setDrawingMode("none");
+                        dispatch(setDrawingMode('none'))
                     },
                     onError: (err) => console.error("Failed to update polygon:", err),
                 }
@@ -72,8 +74,7 @@ const PanelsContainer = () => {
             createObject.mutate(objectData, {
                 onSuccess: (data) => {
                     console.log("Object created:", data);
-                    setNewObjectCoordinate(null);
-                    setDrawingMode("none");
+                    dispatch(setDrawingMode('none'))
                 },
                 onError: (err) => console.error("Failed to create object:", err),
             });
@@ -83,8 +84,7 @@ const PanelsContainer = () => {
                 {
                     onSuccess: (data) => {
                         console.log("Object updated:", data);
-                        setNewObjectCoordinate(null);
-                        setDrawingMode("none");
+                        dispatch(setDrawingMode('none'))
                     },
                     onError: (err) => console.error("Failed to update object:", err),
                 }
@@ -98,22 +98,22 @@ const PanelsContainer = () => {
             <MapPanel
                 polygons={drawingMode !== 'none' ? [] : polygons ?? []}
                 objects={drawingMode !== 'none' ? [] : objects ?? []}
-                onPolygonClick={(polygon) => console.log('Polygon clicked:', polygon)}
-                onObjectClick={(object) => console.log('Object clicked:', object)}
+                // onPolygonClick={(polygon) => console.log('Polygon clicked:', polygon)}
+                // onObjectClick={(object) => console.log('Object clicked:', object)}
                 onMapClick={handleMapClick}
                 drawingMode={drawingMode}
                 editedPointsToDisplay={[
-                    ...newPolygonCoordinates,
-                    ...(newObjectCoordinate ? [newObjectCoordinate] : [])
+                    ...polygonDraftCoordinates,
+                    ...(objectDraftCoordinate ? [objectDraftCoordinate] : [])
                 ]}
             />
 
             <SideBar
-                setDrawingMode={setDrawingMode}
+                // setDrawingMode={setDrawingMode}
                 handleSavePolygon={handleSavePolygon}
                 handleSaveObjectMarker={handleSaveObjectMarker}
-                newPolygonCoordinates={newPolygonCoordinates}
-                newObjectCoordinate={newObjectCoordinate}
+            // polygonDraftCoordinates={polygonDraftCoordinates}
+            // objectDraftCoordinate={objectDraftCoordinate}
             />
         </div>
     );

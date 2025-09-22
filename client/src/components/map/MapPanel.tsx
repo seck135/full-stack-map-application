@@ -7,8 +7,6 @@ import { greenIcon, redIcon } from './icons';
 interface MapPanelProps {
     polygons: Polygon[];
     objects: ObjectMarker[];
-    onPolygonClick: (polygon: Polygon) => void;
-    onObjectClick: (object: ObjectMarker) => void;
     onMapClick: (coordinate: Coordinate) => void;
     drawingMode: 'polygon' | 'marker' | 'none';
     editedPointsToDisplay: Coordinate[];
@@ -42,8 +40,6 @@ const MapEventsHandler = ({ onMapClick, drawingMode }: MapEventsHandlerProps) =>
 const MapPanel = ({
     polygons,
     objects,
-    onPolygonClick,
-    onObjectClick,
     drawingMode,
     onMapClick,
     editedPointsToDisplay,
@@ -84,7 +80,7 @@ const MapPanel = ({
                     key={polygon.id}
                     positions={polygon.coordinates.map((coord) => [coord.lat, coord.lon])}
                     pathOptions={{ color: 'blue' }}
-                    eventHandlers={{ click: () => onPolygonClick(polygon) }}
+                    // eventHandlers={{ click: () => onPolygonClick(polygon) }}
                 >
                     <Popup>
                         <div className='map-panel--polygon-popup'>
@@ -99,7 +95,7 @@ const MapPanel = ({
                 <Marker
                     key={obj.id}
                     position={[obj.lat, obj.lon]}
-                    eventHandlers={{ click: () => onObjectClick(obj) }}
+                    // eventHandlers={{ click: () => onObjectClick(obj) }}
                     icon={greenIcon}
                 >
                     <Popup>

@@ -1,17 +1,19 @@
 import classNames from "classnames";
 import { useState } from "react";
-import type { ObjectMarker } from "../../types/types";
+import { useDispatch } from "react-redux";
 import { useDeleteObject } from "../../api/queries/objects";
+import { setDrawingMode } from "../../store/draftCoordinatesSlice";
+import type { ObjectMarker } from "../../types/types";
 
 interface ObjectListItemProps {
     objectMarker: ObjectMarker
     isObjectToEdit: boolean
-    setDrawingMode: React.Dispatch<React.SetStateAction<"polygon" | "marker" | "none">>
     handleSaveEditedObject: ({ newNameToUpdate }: { newNameToUpdate: string; }) => void
     setObjectMarkerToEdit: React.Dispatch<React.SetStateAction<ObjectMarker | null>>
 }
 
-const ObjectListItem = ({ objectMarker, isObjectToEdit, setDrawingMode, handleSaveEditedObject, setObjectMarkerToEdit }: ObjectListItemProps) => {
+const ObjectListItem = ({ objectMarker, isObjectToEdit, handleSaveEditedObject, setObjectMarkerToEdit }: ObjectListItemProps) => {
+    const dispatch = useDispatch()
     const deleteObjectMarker = useDeleteObject();
 
     const [editedObjectName, setEditedObjectName] = useState(objectMarker.name);
@@ -35,7 +37,7 @@ const ObjectListItem = ({ objectMarker, isObjectToEdit, setDrawingMode, handleSa
                         ? "list-item__update-coordinates-btn--pressable"
                         : "list-item__update-coordinates-btn--disabled"
                 )}
-                onClick={() => setDrawingMode('marker')}
+                onClick={() => dispatch(setDrawingMode('marker'))}
             >
                 {"לחץ כדי לעדכן מיקום"}
             </button>

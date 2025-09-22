@@ -1,31 +1,35 @@
 import { Popover } from 'antd';
 import { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useObjects } from '../../api/queries/objects';
-import type { Coordinate, IObjectCreate, ObjectMarker } from '../../types/types';
+import type { RootState } from '../../store';
+import { setDrawingMode } from '../../store/draftCoordinatesSlice';
+import type { IObjectCreate, ObjectMarker } from '../../types/types';
 import type { Mode } from '../PanelsContainer';
 import ObjectListItem from './ObjectListItem';
 
 
 interface ObjectPanelProps {
     handleSaveObjectMarker: ({ objectToSave, mode }: { objectToSave: IObjectCreate; mode: Mode; }) => void
-    setDrawingMode: React.Dispatch<React.SetStateAction<"polygon" | "marker" | "none">>
-    newObjectCoordinate: Coordinate | null
 }
 
-const ObjectPanel = ({ setDrawingMode, handleSaveObjectMarker, newObjectCoordinate }: ObjectPanelProps) => {
+const ObjectPanel = ({ handleSaveObjectMarker }: ObjectPanelProps) => {
+    const dispatch = useDispatch()
+    const { objectDraftCoordinate } = useSelector((state: RootState) => state.draftCoordinates);
+
     const { data: objects } = useObjects();
 
     const [newObjectName, setNewObjectName] = useState('');
     const [objectMarkerToEdit, setObjectMarkerToEdit] = useState<ObjectMarker | null>(null);
 
     const isNewObjectNameEmpty = newObjectName.trim().length === 0;
-    const isThereCoordinate = newObjectCoordinate !== null;
+    const isThereCoordinate = objectDraftCoordinate !== null;
 
     const handleCreateObjectMarker = () => {
         const objectMarkerToSave: IObjectCreate = {
             name: newObjectName,
-            lat: newObjectCoordinate!.lat,
-            lon: newObjectCoordinate!.lon,
+            lat: objectDraftCoordinate!.lat,
+            lon: objectDraftCoordinate!.lon,
         }
         handleSaveObjectMarker({ objectToSave: objectMarkerToSave, mode: { type: "create" } });
         setNewObjectName('');
@@ -34,8 +38,8 @@ const ObjectPanel = ({ setDrawingMode, handleSaveObjectMarker, newObjectCoordina
     const handleSaveEditedObject = ({ newNameToUpdate }: { newNameToUpdate: string }) => {
         const objectMarkerToSave: IObjectCreate = {
             name: newNameToUpdate,
-            lat: newObjectCoordinate ? newObjectCoordinate!.lat : objectMarkerToEdit?.lat!,
-            lon: newObjectCoordinate ? newObjectCoordinate!.lon : objectMarkerToEdit?.lon!,
+            lat: objectDraftCoordinate ? objectDraftCoordinate!.lat : objectMarkerToEdit?.lat!,
+            lon: objectDraftCoordinate ? objectDraftCoordinate!.lon : objectMarkerToEdit?.lon!,
         }
         handleSaveObjectMarker({ objectToSave: objectMarkerToSave, mode: { type: "update", id: objectMarkerToEdit!.id } });
         setObjectMarkerToEdit(null);
@@ -64,7 +68,7 @@ const ObjectPanel = ({ setDrawingMode, handleSaveObjectMarker, newObjectCoordina
                         <button
                             disabled={isNewObjectNameEmpty}
                             className="polygon-panel__controls__btn polygon-panel__controls__mark-coordinates-btn"
-                            onClick={() => setDrawingMode('marker')}
+                            onClick={() => dispatch(setDrawingMode('marker'))}
                         >
                             סמן אובייקט
                         </button>
@@ -103,7 +107,6 @@ const ObjectPanel = ({ setDrawingMode, handleSaveObjectMarker, newObjectCoordina
                             key={objectMarker.id}
                             objectMarker={objectMarker}
                             isObjectToEdit={isObjectToEdit}
-                            setDrawingMode={setDrawingMode}
                             handleSaveEditedObject={handleSaveEditedObject}
                             setObjectMarkerToEdit={setObjectMarkerToEdit}
                         />

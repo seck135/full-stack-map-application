@@ -1,30 +1,37 @@
 import { Popover } from 'antd';
 import { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { usePolygons } from '../../api/queries/polygons';
-import type { Coordinate, IPolygonCreate, Polygon } from '../../types/types';
+import type { RootState } from '../../store';
+import { setDrawingMode } from '../../store/draftCoordinatesSlice';
+import type { IPolygonCreate, Polygon } from '../../types/types';
 import type { Mode } from '../PanelsContainer';
 import PolygonListItem from './PolygonListItem';
 
 
 interface PolygonPanelProps {
-    setDrawingMode: React.Dispatch<React.SetStateAction<"polygon" | "marker" | "none">>
+    // setDrawingMode: React.Dispatch<React.SetStateAction<"polygon" | "marker" | "none">>
+    // polygonDraftCoordinates: Coordinate[]
     handleSavePolygon: ({ polygonToSave, mode }: { polygonToSave: IPolygonCreate; mode: Mode; }) => void
-    newPolygonCoordinates: Coordinate[]
 }
 
-const PolygonPanel = ({ setDrawingMode, handleSavePolygon, newPolygonCoordinates }: PolygonPanelProps) => {
+const PolygonPanel = ({ handleSavePolygon, }: PolygonPanelProps) => {
+    const dispatch = useDispatch()
+    const { polygonDraftCoordinates, } = useSelector((state: RootState) => state.draftCoordinates);
+
+
     const { data: polygons } = usePolygons();
 
     const [newPolygonName, setNewPolygonName] = useState('');
     const [polygonToEdit, setPolygonToEdit] = useState<Polygon | null>(null);
 
     const isNewPolygonNameEmpty = newPolygonName.trim().length === 0;
-    const isThereCoordinates = newPolygonCoordinates.length > 2;
+    const isThereCoordinates = polygonDraftCoordinates.length > 2;
 
     const handleCreatePolygon = () => {
         const polygonToSave = {
             name: newPolygonName,
-            coordinates: newPolygonCoordinates,
+            coordinates: polygonDraftCoordinates,
         }
         handleSavePolygon({ polygonToSave, mode: { type: "create" } });
         setNewPolygonName('');
@@ -33,7 +40,7 @@ const PolygonPanel = ({ setDrawingMode, handleSavePolygon, newPolygonCoordinates
     const handleSaveEditedPolygon = ({ newNameToUpdate }: { newNameToUpdate: string }) => {
         const polygonToSave = {
             name: newNameToUpdate,
-            coordinates: newPolygonCoordinates.length ? newPolygonCoordinates : polygonToEdit?.coordinates!,
+            coordinates: polygonDraftCoordinates.length ? polygonDraftCoordinates : polygonToEdit?.coordinates!,
         }
         handleSavePolygon({ polygonToSave, mode: { type: "update", id: polygonToEdit!.id } });
         setPolygonToEdit(null);
@@ -61,7 +68,7 @@ const PolygonPanel = ({ setDrawingMode, handleSavePolygon, newPolygonCoordinates
                         <button
                             disabled={isNewPolygonNameEmpty}
                             className="polygon-panel__controls__btn polygon-panel__controls__mark-coordinates-btn"
-                            onClick={() => setDrawingMode('polygon')}
+                            onClick={() => dispatch(setDrawingMode('polygon'))}
                         >
                             סמן פוליגון
                         </button>
@@ -100,10 +107,10 @@ const PolygonPanel = ({ setDrawingMode, handleSavePolygon, newPolygonCoordinates
                             key={polygon.id}
                             polygon={polygon}
                             isPolygonToEdit={isPolygonToEdit}
-                            setDrawingMode={setDrawingMode}
+                            // setDrawingMode={setDrawingMode}
                             handleSaveEditedPolygon={handleSaveEditedPolygon}
                             setPolygonToEdit={setPolygonToEdit}
-                            isThereCoordinates={newPolygonCoordinates.length === 0 || newPolygonCoordinates.length > 2}
+                            isThereCoordinates={polygonDraftCoordinates.length === 0 || polygonDraftCoordinates.length > 2}
                         />
                     )
                 })}

@@ -3,31 +3,24 @@ import { useState } from "react";
 import { useDeletePolygon } from "../../api/queries/polygons";
 import type { Polygon } from "../../types/types";
 import PolygonEditSaveButton from "./PolygonEditSaveButton";
+import { useDispatch } from "react-redux";
+import { setDrawingMode } from "../../store/draftCoordinatesSlice";
 
 interface PolygonListItemProps {
     polygon: Polygon
     isPolygonToEdit: boolean
-    setDrawingMode: React.Dispatch<React.SetStateAction<"polygon" | "marker" | "none">>
     handleSaveEditedPolygon: ({ newNameToUpdate }: { newNameToUpdate: string; }) => void
     setPolygonToEdit: React.Dispatch<React.SetStateAction<Polygon | null>>
     isThereCoordinates: boolean
 }
 
-const PolygonListItem = ({ polygon, isPolygonToEdit, setDrawingMode, handleSaveEditedPolygon, setPolygonToEdit, isThereCoordinates }: PolygonListItemProps) => {
+const PolygonListItem = ({ polygon, isPolygonToEdit, handleSaveEditedPolygon, setPolygonToEdit, isThereCoordinates }: PolygonListItemProps) => {
+    const dispatch = useDispatch()
     const deletePolygon = useDeletePolygon();
 
     const [editedPoltgonName, setEditedPolygonName] = useState(polygon.name);
 
     const isNewPolygonNameEmpty = editedPoltgonName.trim().length === 0;
-
-    if (isPolygonToEdit) {
-        console.log((!isThereCoordinates)
-            ? "😕 נא לסמן לפחות 3 קורדינטות"
-            : isNewPolygonNameEmpty
-                ? "😕 נא להזין שם פוליגון"
-                : "😊 הכל מוכן לשמירה");
-    }
-
 
     return (
         <li key={polygon.id} className="list-item">
@@ -48,7 +41,7 @@ const PolygonListItem = ({ polygon, isPolygonToEdit, setDrawingMode, handleSaveE
                         ? "list-item__update-coordinates-btn--pressable"
                         : "list-item__update-coordinates-btn--disabled"
                 )}
-                onClick={() => setDrawingMode('polygon')}
+                onClick={() => dispatch(setDrawingMode('polygon'))}
             >
                 {"לחץ כדי לעדכן קורדינטות"}
             </button>
