@@ -2,7 +2,7 @@ import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { Polygon as LeafletPolygon, MapContainer, Marker, Polyline, Popup, TileLayer, useMapEvents } from 'react-leaflet';
 import type { Coordinate, ObjectMarker, Polygon } from '../../types/types';
-import { redIcon } from './icons';
+import { greenIcon, redIcon } from './icons';
 
 interface MapPanelProps {
     polygons: Polygon[];
@@ -59,19 +59,7 @@ const MapPanel = ({
             />
             <MapEventsHandler onMapClick={onMapClick} drawingMode={drawingMode} />
 
-            {/* Polygon קיים */}
-            {polygons.map((polygon) => (
-                <LeafletPolygon
-                    key={polygon.id}
-                    positions={polygon.coordinates.map((coord) => [coord.lat, coord.lon])}
-                    pathOptions={{ color: 'blue' }}
-                    eventHandlers={{ click: () => onPolygonClick(polygon) }}
-                >
-                    <Popup>{polygon.name}</Popup>
-                </LeafletPolygon>
-            ))}
-
-            {/* Polygon שנבחר עכשיו */}
+            {/* Mark the lines of Edited Polygon */}
             {drawingMode !== 'polygon' && editedPointsToDisplay.length > 0 && (
                 <Polyline
                     positions={editedPointsToDisplay.map((coord) => [coord.lat, coord.lon])}
@@ -79,7 +67,7 @@ const MapPanel = ({
                 />
             )}
 
-            {/* Show points while drawing */}
+            {/* Show points while drawing/editing */}
             {drawingMode !== 'none' &&
                 editedPointsToDisplay.map((coord, index) => (
                     <Marker
@@ -91,16 +79,39 @@ const MapPanel = ({
                     </Marker>
                 ))}
 
-            {/* Object Marker */}
+            {/* Polygons */}
+            {polygons.map((polygon) => (
+                <LeafletPolygon
+                    key={polygon.id}
+                    positions={polygon.coordinates.map((coord) => [coord.lat, coord.lon])}
+                    pathOptions={{ color: 'blue' }}
+                    eventHandlers={{ click: () => onPolygonClick(polygon) }}
+                >
+                    <Popup>
+                        <div className='map-panel--polygon-popup'>
+                            {polygon.name}
+                        </div>
+                    </Popup>
+                </LeafletPolygon>
+            ))}
+
+            {/* Objects Marker */}
             {objects.map((obj) => (
                 <Marker
                     key={obj.id}
                     position={[obj.lat, obj.lon]}
                     eventHandlers={{ click: () => onObjectClick(obj) }}
+                    icon={greenIcon}
                 >
-                    <Popup>{obj.name}</Popup>
+                    <Popup>
+                        <div className='map-panel--object-marker-popup'>
+                            {obj.name}
+                        </div>
+                    </Popup>
                 </Marker>
+
             ))}
+
         </MapContainer>
     );
 };

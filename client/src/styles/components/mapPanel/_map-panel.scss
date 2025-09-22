@@ -3,4 +3,16 @@
     
     height: 100%;
     width: 100%;
+
+    &--polygon-popup {
+        font-weight: bold;
+        font-size: 2.2rem;
+        color: darkblue;
+    }
+    
+    &--object-marker-popup {
+        font-weight: bold;
+        font-size: 2.2rem;
+        color: green;
+    }
 }
