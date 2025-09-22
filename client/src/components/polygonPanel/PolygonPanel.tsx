@@ -103,7 +103,7 @@ const PolygonPanel = ({ setDrawingMode, handleSavePolygon, newPolygonCoordinates
                             setDrawingMode={setDrawingMode}
                             handleSaveEditedPolygon={handleSaveEditedPolygon}
                             setPolygonToEdit={setPolygonToEdit}
-                            isThereCoordinates={newPolygonCoordinates.length > 2}
+                            isThereCoordinates={newPolygonCoordinates.length === 0 || newPolygonCoordinates.length > 2}
                         />
                     )
                 })}
