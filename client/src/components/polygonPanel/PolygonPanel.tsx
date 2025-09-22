@@ -1,7 +1,7 @@
 import { Popover } from 'antd';
 import { useState } from 'react';
 import { useDeletePolygon, usePolygons } from '../../api/queries/polygons';
-import type { Coordinate } from '../../types/types';
+import type { Coordinate, Polygon } from '../../types/types';
 
 
 interface PolygonPanelProps {
@@ -12,9 +12,10 @@ interface PolygonPanelProps {
 
 const PolygonPanel = ({ setDrawingMode, handleFinishPolygon, newPolygonCoordinates }: PolygonPanelProps) => {
     const { data: polygons } = usePolygons();
-    
+
     const deletePolygon = useDeletePolygon();
     const [newPolygonName, setNewPolygonName] = useState('');
+    const [polygonToEdit, setPolygonToEdit] = useState<Polygon | null>(null);
 
     const isNewPolygonNameEmpty = newPolygonName.trim().length === 0;
     const isThereCoordinates = newPolygonCoordinates.length > 2;
@@ -74,16 +75,25 @@ const PolygonPanel = ({ setDrawingMode, handleFinishPolygon, newPolygonCoordinat
             </div>
 
             <ul className="polygon-panel__polygon-list">
-                {(polygons ?? []).map(polygon => (
-                    <li key={polygon.id} className="polygon-panel__polygon-list__item">
-                        <span className="polygon-panel__polygon-list__item--name">{polygon.name}</span>
-                        <div className="polygon-panel__polygon-list__item__actions">
-                            <button className="polygon-panel__polygon-list__item__actions__btn polygon-panel__polygon-list__item__actions__edit-btn">ערוך</button>
-                            <button onClick={() => deletePolygon.mutate(polygon.id)}
-                            className="polygon-panel__polygon-list__item__actions__btn polygon-panel__polygon-list__item__actions__delete-btn">מחק</button>
-                        </div>
-                    </li>
-                ))}
+                {(polygons ?? []).map(polygon => {
+                    const isPolygonToEdit = polygonToEdit?.id === polygon.id;
+                    return (
+                        <li key={polygon.id} className="polygon-panel__polygon-list__item">
+                            <span className="polygon-panel__polygon-list__item--name">{polygon.name}</span>
+                            <span>לחץ כדי לעדכן קורדינות</span>
+                            <div className="polygon-panel__polygon-list__item__actions">
+                                <button
+                                    className="polygon-panel__polygon-list__item__actions__btn polygon-panel__polygon-list__item__actions__edit-btn"
+                                    onClick={() => setPolygonToEdit(isPolygonToEdit ? null : polygon)}
+                                >
+                                    {isPolygonToEdit ? "שמור" : "ערוך"}
+                                </button>
+                                <button onClick={() => deletePolygon.mutate(polygon.id)}
+                                    className="polygon-panel__polygon-list__item__actions__btn polygon-panel__polygon-list__item__actions__delete-btn">מחק</button>
+                            </div>
+                        </li>
+                    )
+                })}
             </ul>
         </div>
     );

@@ -38,7 +38,7 @@ const PanelsContainer = () => {
             name: polygonName,
             coordinates: newPolygonCoordinates,
         };
-        // setPolygons([...polygons, newPolygon]);
+
         createPolygon.mutate(
             newPolygon,
             {
@@ -58,8 +58,8 @@ const PanelsContainer = () => {
     return (
         <div className='panels-container'>
             <MapPanel
-                polygons={drawingMode === 'marker' ? [] : polygons ?? []}
-                objects={drawingMode === 'polygon' ? [] : objects ?? []}
+                polygons={drawingMode !== 'none' ? [] : polygons ?? []}
+                objects={drawingMode !== 'none' ? [] : objects ?? []}
                 onPolygonClick={(polygon) => console.log('Polygon clicked:', polygon)}
                 onObjectClick={(object) => console.log('Object clicked:', object)}
                 onMapClick={handleMapClick}
