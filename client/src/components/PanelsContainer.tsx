@@ -1,13 +1,18 @@
 import { useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
-import { useCreatePolygon, usePolygons } from '../api/queries/polygons';
+import { useCreatePolygon, usePolygons, useUpdatePolygon } from '../api/queries/polygons';
 import type { Coordinate, IPolygonCreate, ObjectMarker } from '../types/types';
 import MapPanel from './map/MapPanel';
 import SideBar from './SideBar';
 
+export type Mode =
+    | { type: "create" }
+    | { type: "update"; id: string };
+
 const PanelsContainer = () => {
     const { data: polygons, isLoading, error } = usePolygons();
     const createPolygon = useCreatePolygon();
+    const updatePolygon = useUpdatePolygon();
 
     const [objects, setObjects] = useState<ObjectMarker[]>([]);
     const [drawingMode, setDrawingMode] = useState<'polygon' | 'marker' | 'none'>('none');
@@ -33,27 +38,36 @@ const PanelsContainer = () => {
     };
 
     // סיום פוליגון
-    const handleFinishPolygon = (polygonName: string) => {
-        const newPolygon: IPolygonCreate = {
-            name: polygonName,
-            coordinates: newPolygonCoordinates,
+    const handleFinishPolygon = ({ polygonToSave, mode }: { polygonToSave: IPolygonCreate, mode: Mode }) => {
+        const polygonData: IPolygonCreate = {
+            name: polygonToSave.name,
+            coordinates: polygonToSave.coordinates,
         };
 
-        createPolygon.mutate(
-            newPolygon,
-            {
+        if (mode.type === "create") {
+            createPolygon.mutate(polygonData, {
                 onSuccess: (data) => {
-                    console.log("Polygon created:", data); // runs after success
-                    // You can reset form or show a message
+                    console.log("Polygon created:", data);
                     setNewPolygonCoordinates([]);
-                    setDrawingMode('none');
+                    setDrawingMode("none");
                 },
-                onError: (err) => {
-                    console.error("Failed to create polygon:", err);
-                },
-            }
-        );
+                onError: (err) => console.error("Failed to create polygon:", err),
+            });
+        } else if (mode.type === "update") {
+            updatePolygon.mutate(
+                { id: mode.id, polygon: polygonData },
+                {
+                    onSuccess: (data) => {
+                        console.log("Polygon updated:", data);
+                        setNewPolygonCoordinates([]);
+                        setDrawingMode("none");
+                    },
+                    onError: (err) => console.error("Failed to update polygon:", err),
+                }
+            );
+        }
     };
+
 
     return (
         <div className='panels-container'>

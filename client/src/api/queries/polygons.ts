@@ -1,6 +1,6 @@
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { polygonsApi } from "../polygonsApi";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import type { IPolygonCreate } from "../../types/types";
+import { polygonsApi } from "../polygonsApi";
 
 // GET all polygons
 export const usePolygons = () => {

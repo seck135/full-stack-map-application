@@ -1,12 +1,14 @@
 import { Popover } from 'antd';
 import { useState } from 'react';
 import { useDeletePolygon, usePolygons } from '../../api/queries/polygons';
-import type { Coordinate, Polygon } from '../../types/types';
+import type { Coordinate, IPolygonCreate, Polygon } from '../../types/types';
+import type { Mode } from '../PanelsContainer';
+import classNames from 'classnames';
 
 
 interface PolygonPanelProps {
     setDrawingMode: React.Dispatch<React.SetStateAction<"polygon" | "marker" | "none">>
-    handleFinishPolygon: (polygonName: string) => void
+    handleFinishPolygon: ({ polygonToSave, mode }: { polygonToSave: IPolygonCreate; mode: Mode; }) => void
     newPolygonCoordinates: Coordinate[]
 }
 
@@ -16,13 +18,27 @@ const PolygonPanel = ({ setDrawingMode, handleFinishPolygon, newPolygonCoordinat
     const deletePolygon = useDeletePolygon();
     const [newPolygonName, setNewPolygonName] = useState('');
     const [polygonToEdit, setPolygonToEdit] = useState<Polygon | null>(null);
+    const [editedPolygonName, setEditedPolygonName] = useState('');
 
     const isNewPolygonNameEmpty = newPolygonName.trim().length === 0;
     const isThereCoordinates = newPolygonCoordinates.length > 2;
 
-    const handleSavePolygon = () => {
-        handleFinishPolygon(newPolygonName);
+    const handleCreatePolygon = () => {
+        const polygonToSave = {
+            name: newPolygonName,
+            coordinates: newPolygonCoordinates,
+        }
+        handleFinishPolygon({ polygonToSave, mode: { type: "create" } });
         setNewPolygonName('');
+    }
+
+    const handleSaveEditedPolygon = () => {
+        const polygonToSave = {
+            name: editedPolygonName ? editedPolygonName : polygonToEdit?.name!,
+            coordinates: newPolygonCoordinates ? newPolygonCoordinates : polygonToEdit?.coordinates!,
+        }
+        handleFinishPolygon({ polygonToSave, mode: { type: "update", id: polygonToEdit!.id } });
+        setPolygonToEdit(null);
     }
 
     return (
@@ -63,14 +79,12 @@ const PolygonPanel = ({ setDrawingMode, handleFinishPolygon, newPolygonCoordinat
                         <button
                             disabled={!isThereCoordinates}
                             className="polygon-panel__controls__btn polygon-panel__controls__create-btn"
-                            onClick={handleSavePolygon}
+                            onClick={handleCreatePolygon}
                         >
                             שמור
                         </button>
                     </span>
                 </Popover>
-
-
 
             </div>
 
@@ -80,11 +94,18 @@ const PolygonPanel = ({ setDrawingMode, handleFinishPolygon, newPolygonCoordinat
                     return (
                         <li key={polygon.id} className="polygon-panel__polygon-list__item">
                             <span className="polygon-panel__polygon-list__item--name">{polygon.name}</span>
-                            <span>לחץ כדי לעדכן קורדינות</span>
+                            <button
+                                className={classNames("polygon-panel__polygon-list__item__update-coordinates-btn",
+                                    isPolygonToEdit ? "polygon-panel__polygon-list__item__update-coordinates-btn--active"
+                                        : "polygon-panel__polygon-list__item__update-coordinates-btn--disabled")}
+                                onClick={() => setDrawingMode('polygon')}
+                            >
+                                {"לחץ כדי לעדכן קורדינות"}
+                            </button>
                             <div className="polygon-panel__polygon-list__item__actions">
                                 <button
                                     className="polygon-panel__polygon-list__item__actions__btn polygon-panel__polygon-list__item__actions__edit-btn"
-                                    onClick={() => setPolygonToEdit(isPolygonToEdit ? null : polygon)}
+                                    onClick={() => isPolygonToEdit ? handleSaveEditedPolygon() : setPolygonToEdit(polygon)}
                                 >
                                     {isPolygonToEdit ? "שמור" : "ערוך"}
                                 </button>

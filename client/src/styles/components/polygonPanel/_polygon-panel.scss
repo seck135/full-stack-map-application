@@ -115,6 +115,8 @@
             padding: 0.6rem 0;
             border-bottom: 0.1rem solid #eee;
 
+            $buttons-padding: 0.4rem 0.8rem;
+
             &:last-child {
                 border-bottom: none;
             }
@@ -123,11 +125,37 @@
                 font-size: 2rem;
             }
 
+            &__update-coordinates-btn {
+                height: 100%;
+                padding: $buttons-padding;
+                border: none;
+                border-radius: 0.3rem;
+                font-size: 1.8rem;
+                transition: background-color 0.2s, color 0.2s;
+                cursor: pointer;
+
+                // Default style (disabled)
+                &--disabled {
+                    background-color: #ccc;
+                    color: #666;
+                    cursor: not-allowed;
+                }
+
+                // Active style
+                &--active {
+                    background-color: #4caf50; // green
+                    color: #fff;
+
+                    &:hover {
+                        background-color: #45a049;
+                    }
+                }
+            }
+
             &__actions {
                 display: flex;
                 gap: 1rem;
 
-                $buttons-padding: 0.4rem 0.8rem;
 
                 &__btn {
                     color: #fff;
