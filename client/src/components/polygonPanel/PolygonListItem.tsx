@@ -31,7 +31,7 @@ const PolygonListItem = ({ polygon, isPolygonToEdit, setDrawingMode, handleSaveE
             }
             <button
                 className={classNames("polygon-list-item__update-coordinates-btn",
-                    isPolygonToEdit ? "polygon-list-item__update-coordinates-btn--active"
+                    isPolygonToEdit ? "polygon-list-item__update-coordinates-btn--pressable"
                         : "polygon-list-item__update-coordinates-btn--disabled")}
                 onClick={() => setDrawingMode('polygon')}
             >

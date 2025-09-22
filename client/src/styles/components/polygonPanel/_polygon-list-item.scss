@@ -35,10 +35,11 @@
     &__update-coordinates-btn {
         height: 100%;
         padding: $buttons-padding;
+
         border: none;
         border-radius: 0.3rem;
         font-size: 1.8rem;
-        transition: background-color 0.2s, color 0.2s;
+        transition: all 0.2s ease-out;
         cursor: pointer;
 
         // Default style (disabled)
@@ -48,13 +49,17 @@
             cursor: not-allowed;
         }
 
-        // Active style
-        &--active {
+        // pressable style
+        &--pressable {
             background-color: #4caf50; // green
             color: #fff;
 
             &:hover {
                 background-color: #45a049;
+            }
+
+            &:active {
+                transform: scale(0.96);
             }
         }
     }

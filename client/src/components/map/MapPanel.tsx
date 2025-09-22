@@ -28,7 +28,7 @@ L.Icon.Default.mergeOptions({
 });
 
 
-function MapEventsHandler({ onMapClick, drawingMode }: MapEventsHandlerProps) {
+const MapEventsHandler = ({ onMapClick, drawingMode }: MapEventsHandlerProps) => {
     useMapEvents({
         click(e) {
             if (drawingMode === 'marker' || drawingMode === 'polygon') {
@@ -36,7 +36,6 @@ function MapEventsHandler({ onMapClick, drawingMode }: MapEventsHandlerProps) {
             }
         },
     });
-
     return null;
 }
 
