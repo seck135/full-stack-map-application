@@ -1,57 +1,66 @@
 import { useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
-import type { LatLng, ObjectMarker, Polygon } from '../types/types';
+import type { IPolygonCreate, Coordinate, ObjectMarker, Polygon } from '../types/types';
 import MapPanel from './map/MapPanel';
 import SideBar from './SideBar';
-import { usePolygons } from '../api/queries/polygons';
+import { useCreatePolygon, usePolygons } from '../api/queries/polygons';
 
 const PanelsContainer = () => {
     const { data: polygonsData, isLoading, error } = usePolygons();
     console.log(polygonsData);
-    
-    
-    const [polygons, setPolygons] = useState<Polygon[]>([]);
+    const createPolygon = useCreatePolygon();
+
     const [objects, setObjects] = useState<ObjectMarker[]>([]);
     const [drawingMode, setDrawingMode] = useState<'polygon' | 'marker' | 'none'>('none');
-    const [newPolygonCoordinates, setNewPolygonCoordinates] = useState<LatLng[]>([]);
+    const [newPolygonCoordinates, setNewPolygonCoordinates] = useState<Coordinate[]>([]);
     const [newName, setNewName] = useState<string>(''); // שם חדש לפוליגון/אובייקט
 
     // לחיצה במפה
-    const handleMapClick = (latlng: LatLng) => {
+    const handleMapClick = (coordinate: Coordinate) => {
+        console.log("handleMapClick");
+
         if (drawingMode === 'marker') {
             const newMarker: ObjectMarker = {
                 id: uuidv4(),
                 name: newName || `Object ${objects.length + 1}`,
-                coordinate: latlng,
+                coordinate: coordinate,
             };
             setObjects([...objects, newMarker]);
             setDrawingMode('none');
             // setNewName('');
         } else if (drawingMode === 'polygon') {
-            setNewPolygonCoordinates((prev) => [...prev, latlng]);
+            setNewPolygonCoordinates((prev) => [...prev, coordinate]);
         }
     };
 
     // סיום פוליגון
     const handleFinishPolygon = (polygonName: string) => {
-        if (newPolygonCoordinates.length > 2) {
-            const newPolygon: Polygon = {
-                id: uuidv4(),
-                name: polygonName || `Polygon ${polygons.length + 1}`,
-                coordinates: newPolygonCoordinates,
-            };
-            setPolygons([...polygons, newPolygon]);
-        }
-        setNewPolygonCoordinates([]);
-        setDrawingMode('none');
-        // setNewName('');
+        const newPolygon: IPolygonCreate = {
+            name: polygonName,
+            coordinates: newPolygonCoordinates,
+        };
+        // setPolygons([...polygons, newPolygon]);
+        createPolygon.mutate(
+            newPolygon,
+            {
+                onSuccess: (data) => {
+                    console.log("Polygon created:", data); // runs after success
+                    // You can reset form or show a message
+                    setNewPolygonCoordinates([]);
+                    setDrawingMode('none');
+                },
+                onError: (err) => {
+                    console.error("Failed to create polygon:", err);
+                },
+            }
+        );
     };
 
     return (
         <div className='panels-container'>
             <MapPanel
-                polygons={polygons}
-                objects={objects}
+                polygons={drawingMode === 'marker' ? [] : polygonsData ?? []}
+                objects={drawingMode === 'polygon' ? [] : objects ?? []}
                 onPolygonClick={(polygon) => console.log('Polygon clicked:', polygon)}
                 onObjectClick={(object) => console.log('Object clicked:', object)}
                 onMapClick={handleMapClick}
@@ -62,7 +71,7 @@ const PanelsContainer = () => {
             <SideBar
                 setDrawingMode={setDrawingMode}
                 handleFinishPolygon={handleFinishPolygon}
-                polygons={polygons}
+                polygons={polygonsData ?? []}
                 newPolygonCoordinates={newPolygonCoordinates}
             />
 

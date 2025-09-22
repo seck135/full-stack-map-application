@@ -1,16 +1,16 @@
-export interface LatLng {
+export interface Coordinate {
     lat: number;
-    lng: number;
+    lon: number;
 }
 
 export interface IPolygonCreate {
     name: string;
-    coordinates: LatLng[];
+    coordinates: Coordinate[];
 }
 
 export interface IObjectCreate {
     name: string;
-    coordinate: LatLng;
+    coordinate: Coordinate;
 }
 
 export interface Polygon extends IPolygonCreate {

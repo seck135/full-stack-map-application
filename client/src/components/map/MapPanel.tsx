@@ -2,7 +2,7 @@ import React from 'react';
 import { MapContainer, TileLayer, Marker, Popup, Polygon as LeafletPolygon, useMapEvents, Polyline } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
-import type { Polygon, ObjectMarker, LatLng } from '../../types/types';
+import type { Polygon, ObjectMarker, Coordinate } from '../../types/types';
 
 // תיקון אייקון ברירת מחדל
 delete (L.Icon.Default.prototype as any)._getIconUrl;
@@ -17,16 +17,16 @@ interface MapPanelProps {
     objects: ObjectMarker[];
     onPolygonClick: (polygon: Polygon) => void;
     onObjectClick: (object: ObjectMarker) => void;
-    onMapClick: (latlng: LatLng) => void;
+    onMapClick: (coordinate: Coordinate) => void;
     drawingMode: 'polygon' | 'marker' | 'none';
-    newPolygonCoordinates: LatLng[];
+    newPolygonCoordinates: Coordinate[];
 }
 
-const MapEventsHandler: React.FC<{ onMapClick: (latlng: LatLng) => void; drawingMode: 'polygon' | 'marker' | 'none' }> = ({ onMapClick, drawingMode }) => {
+const MapEventsHandler: React.FC<{ onMapClick: (latlng: Coordinate) => void; drawingMode: 'polygon' | 'marker' | 'none' }> = ({ onMapClick, drawingMode }) => {
     useMapEvents({
         click(e) {
             if (drawingMode === 'marker' || drawingMode === 'polygon') {
-                onMapClick({ lat: e.latlng.lat, lng: e.latlng.lng });
+                onMapClick({ lat: e.latlng.lat, lon: e.latlng.lng });
             }
         },
     });
@@ -34,10 +34,10 @@ const MapEventsHandler: React.FC<{ onMapClick: (latlng: LatLng) => void; drawing
 };
 
 const MapPanel = ({ polygons, objects, onPolygonClick, onObjectClick, drawingMode, onMapClick, newPolygonCoordinates }: MapPanelProps) => {
-    const mapCenter: LatLng = { lat: 31.7683, lng: 35.2137 };
+    const mapCenter: Coordinate = { lat: 31.7683, lon: 35.2137 };
 
     return (
-        <MapContainer className='map-panel' center={[mapCenter.lat, mapCenter.lng]} zoom={13}>
+        <MapContainer className='map-panel' center={[mapCenter.lat, mapCenter.lon]} zoom={13}>
             <TileLayer
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                 attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
@@ -48,7 +48,7 @@ const MapPanel = ({ polygons, objects, onPolygonClick, onObjectClick, drawingMod
             {polygons.map((polygon) => (
                 <LeafletPolygon
                     key={polygon.id}
-                    positions={polygon.coordinates.map((coord) => [coord.lat, coord.lng])}
+                    positions={polygon.coordinates.map((coord) => [coord.lat, coord.lon])}
                     pathOptions={{ color: 'blue' }}
                     eventHandlers={{ click: () => onPolygonClick(polygon) }}
                 >
@@ -59,7 +59,7 @@ const MapPanel = ({ polygons, objects, onPolygonClick, onObjectClick, drawingMod
             {/* Polygon שנבחר עכשיו */}
             {drawingMode === 'polygon' && newPolygonCoordinates.length > 0 && (
                 <Polyline
-                    positions={newPolygonCoordinates.map((coord) => [coord.lat, coord.lng])}
+                    positions={newPolygonCoordinates.map((coord) => [coord.lat, coord.lon])}
                     pathOptions={{ color: 'red', dashArray: '5,10' }}
                 />
             )}
@@ -68,7 +68,7 @@ const MapPanel = ({ polygons, objects, onPolygonClick, onObjectClick, drawingMod
             {objects.map((obj) => (
                 <Marker
                     key={obj.id}
-                    position={[obj.coordinate.lat, obj.coordinate.lng]}
+                    position={[obj.coordinate.lat, obj.coordinate.lon]}
                     eventHandlers={{ click: () => onObjectClick(obj) }}
                 >
                     <Popup>{obj.name}</Popup>

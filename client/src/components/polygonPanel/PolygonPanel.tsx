@@ -1,13 +1,13 @@
 import { Popover } from 'antd';
 import { useState } from 'react';
-import type { LatLng, Polygon } from '../../types/types';
+import type { Coordinate, Polygon } from '../../types/types';
 
 
 interface PolygonPanelProps {
     setDrawingMode: React.Dispatch<React.SetStateAction<"polygon" | "marker" | "none">>
     handleFinishPolygon: (polygonName: string) => void
     polygons: Polygon[]
-    newPolygonCoordinates: LatLng[]
+    newPolygonCoordinates: Coordinate[]
 }
 
 const PolygonPanel = ({ setDrawingMode, handleFinishPolygon, polygons, newPolygonCoordinates }: PolygonPanelProps) => {

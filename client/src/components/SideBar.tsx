@@ -1,11 +1,11 @@
-import type { LatLng, Polygon } from "../types/types"
+import type { Coordinate, Polygon } from "../types/types"
 import PolygonPanel from "./polygonPanel/PolygonPanel"
 
 interface SideBarProps {
     setDrawingMode: React.Dispatch<React.SetStateAction<"polygon" | "marker" | "none">>
     handleFinishPolygon: (polygonName: string) => void
     polygons: Polygon[]
-    newPolygonCoordinates: LatLng[]
+    newPolygonCoordinates: Coordinate[]
 }
 
 const SideBar = ({ setDrawingMode, handleFinishPolygon, polygons, newPolygonCoordinates }: SideBarProps) => {
