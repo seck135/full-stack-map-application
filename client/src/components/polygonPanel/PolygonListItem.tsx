@@ -17,7 +17,7 @@ const PolygonListItem = ({ polygon, isPolygonToEdit, setDrawingMode, handleSaveE
     const [editedPoltgonName, setEditedPolygonName] = useState(polygon.name);
 
     return (
-        <li key={polygon.id} className="polygon-list-item">
+        <li key={polygon.id} className="list-item">
             {
                 isPolygonToEdit ?
                     <input
@@ -25,21 +25,25 @@ const PolygonListItem = ({ polygon, isPolygonToEdit, setDrawingMode, handleSaveE
                         placeholder="הזן שם פוליגון"
                         value={editedPoltgonName}
                         onChange={(e) => setEditedPolygonName(e.target.value)}
-                        className="polygon-list-item--input"
+                        className="list-item--input"
                     />
-                    : <span className="polygon-list-item--name">{polygon.name}</span>
+                    : <span className="list-item--name">{polygon.name}</span>
             }
             <button
-                className={classNames("polygon-list-item__update-coordinates-btn",
-                    isPolygonToEdit ? "polygon-list-item__update-coordinates-btn--pressable"
-                        : "polygon-list-item__update-coordinates-btn--disabled")}
+                className={classNames("list-item__update-coordinates-btn",
+                    isPolygonToEdit
+                        ? "list-item__update-coordinates-btn--pressable"
+                        : "list-item__update-coordinates-btn--disabled"
+                )}
                 onClick={() => setDrawingMode('polygon')}
             >
                 {"לחץ כדי לעדכן קורדינטות"}
             </button>
-            <div className="polygon-list-item__actions">
+            <div className="list-item__actions">
                 <button
-                    className="polygon-list-item__actions__btn polygon-list-item__actions__edit-btn"
+                    className={classNames("list-item__actions__btn",
+                        isPolygonToEdit ? "list-item__actions__btn--save" : "list-item__actions__btn--edit"
+                    )}
                     onClick={() =>
                         isPolygonToEdit
                             ? handleSaveEditedPolygon({ newNameToUpdate: editedPoltgonName })
@@ -50,7 +54,7 @@ const PolygonListItem = ({ polygon, isPolygonToEdit, setDrawingMode, handleSaveE
                 <button
                     onClick={() => deletePolygon.mutate(polygon.id)}
                     disabled={deletePolygon.isPending}
-                    className="polygon-list-item__actions__btn polygon-list-item__actions__delete-btn">
+                    className="list-item__actions__btn list-item__actions__delete-btn">
                     {deletePolygon.isPending ? "מוחק..." : "מחק"}
                 </button>
             </div>

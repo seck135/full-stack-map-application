@@ -91,12 +91,12 @@ const ObjectPanel = ({ setDrawingMode, handleSaveObjectMarker, newObjectCoordina
 
             <ul className="polygon-panel__polygon-list">
                 {([...(objects ?? [])].reverse()).map(objectMarker => {
-                    const isPolygonToEdit = objectMarkerToEdit?.id === objectMarker.id;
+                    const isObjectToEdit = objectMarkerToEdit?.id === objectMarker.id;
                     return (
                         <ObjectListItem
                             key={objectMarker.id}
                             objectMarker={objectMarker}
-                            isPolygonToEdit={isPolygonToEdit}
+                            isObjectToEdit={isObjectToEdit}
                             setDrawingMode={setDrawingMode}
                             handleSaveEditedObject={handleSaveEditedObject}
                             setObjectMarkerToEdit={setObjectMarkerToEdit}

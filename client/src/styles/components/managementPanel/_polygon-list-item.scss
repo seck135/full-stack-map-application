@@ -1,4 +1,4 @@
-.polygon-list-item {
+.list-item {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -79,22 +79,40 @@
             cursor: pointer;
             transition: background-color 0.2s, transform 0.1s;
 
+
             &:active {
                 transform: scale(0.98);
             }
-        }
 
-        &__edit-btn {
-            background-color: #2196f3;
+            &--edit {
+                background-color: #42a5f5;
+                font-weight: 500;
 
-            &:hover {
-                background-color: #1976d2;
+                &:hover {
+                    background-color: #1e88e5;
+                }
+
+                &:active {
+                    background-color: #1565c0;
+                }
             }
 
-            &:active {
-                background-color: #1565c0;
+            &--save {
+                transform: scale(1.03);
+                background-color: #0d47a1;
+                font-weight: bold;
+
+                &:hover {
+                    background-color: #1565c0; // כחול בהיר יותר בהובר
+                }
+
+                &:active {
+                    background-color: #0b3d91; // כחול כהה בלחיצה
+                }
             }
+
         }
+
 
         &__delete-btn {
             background-color: #f44336;
