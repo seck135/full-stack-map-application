@@ -1,20 +1,18 @@
-import type { Coordinate, Polygon } from "../types/types"
+import type { Coordinate } from "../types/types"
 import PolygonPanel from "./polygonPanel/PolygonPanel"
 
 interface SideBarProps {
     setDrawingMode: React.Dispatch<React.SetStateAction<"polygon" | "marker" | "none">>
     handleFinishPolygon: (polygonName: string) => void
-    polygons: Polygon[]
     newPolygonCoordinates: Coordinate[]
 }
 
-const SideBar = ({ setDrawingMode, handleFinishPolygon, polygons, newPolygonCoordinates }: SideBarProps) => {
+const SideBar = ({ setDrawingMode, handleFinishPolygon, newPolygonCoordinates }: SideBarProps) => {
     return (
         <div className="side-bar" >
             <PolygonPanel
                 handleFinishPolygon={handleFinishPolygon}
                 setDrawingMode={setDrawingMode}
-                polygons={polygons}
                 newPolygonCoordinates={newPolygonCoordinates}
             />
             {/* <button onClick={() => setDrawingMode('polygon')}>Start Drawing Polygon</button> */}

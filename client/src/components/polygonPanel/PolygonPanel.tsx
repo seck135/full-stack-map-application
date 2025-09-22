@@ -1,18 +1,20 @@
 import { Popover } from 'antd';
 import { useState } from 'react';
-import type { Coordinate, Polygon } from '../../types/types';
+import { useDeletePolygon, usePolygons } from '../../api/queries/polygons';
+import type { Coordinate } from '../../types/types';
 
 
 interface PolygonPanelProps {
     setDrawingMode: React.Dispatch<React.SetStateAction<"polygon" | "marker" | "none">>
     handleFinishPolygon: (polygonName: string) => void
-    polygons: Polygon[]
     newPolygonCoordinates: Coordinate[]
 }
 
-const PolygonPanel = ({ setDrawingMode, handleFinishPolygon, polygons, newPolygonCoordinates }: PolygonPanelProps) => {
+const PolygonPanel = ({ setDrawingMode, handleFinishPolygon, newPolygonCoordinates }: PolygonPanelProps) => {
+    const { data: polygons } = usePolygons();
+    
+    const deletePolygon = useDeletePolygon();
     const [newPolygonName, setNewPolygonName] = useState('');
-    // const [currentDrawing, setCurrentDrawing] = useState<LatLng[]>([]);
 
     const isNewPolygonNameEmpty = newPolygonName.trim().length === 0;
     const isThereCoordinates = newPolygonCoordinates.length > 2;
@@ -72,12 +74,13 @@ const PolygonPanel = ({ setDrawingMode, handleFinishPolygon, polygons, newPolygo
             </div>
 
             <ul className="polygon-panel__polygon-list">
-                {polygons.map(polygon => (
+                {(polygons ?? []).map(polygon => (
                     <li key={polygon.id} className="polygon-panel__polygon-list__item">
                         <span className="polygon-panel__polygon-list__item--name">{polygon.name}</span>
                         <div className="polygon-panel__polygon-list__item__actions">
                             <button className="polygon-panel__polygon-list__item__actions__btn polygon-panel__polygon-list__item__actions__edit-btn">ערוך</button>
-                            <button className="polygon-panel__polygon-list__item__actions__btn polygon-panel__polygon-list__item__actions__delete-btn">מחק</button>
+                            <button onClick={() => deletePolygon.mutate(polygon.id)}
+                            className="polygon-panel__polygon-list__item__actions__btn polygon-panel__polygon-list__item__actions__delete-btn">מחק</button>
                         </div>
                     </li>
                 ))}

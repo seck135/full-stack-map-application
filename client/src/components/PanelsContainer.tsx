@@ -1,13 +1,12 @@
 import { useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
-import type { IPolygonCreate, Coordinate, ObjectMarker, Polygon } from '../types/types';
+import { useCreatePolygon, usePolygons } from '../api/queries/polygons';
+import type { Coordinate, IPolygonCreate, ObjectMarker } from '../types/types';
 import MapPanel from './map/MapPanel';
 import SideBar from './SideBar';
-import { useCreatePolygon, usePolygons } from '../api/queries/polygons';
 
 const PanelsContainer = () => {
-    const { data: polygonsData, isLoading, error } = usePolygons();
-    console.log(polygonsData);
+    const { data: polygons, isLoading, error } = usePolygons();
     const createPolygon = useCreatePolygon();
 
     const [objects, setObjects] = useState<ObjectMarker[]>([]);
@@ -59,7 +58,7 @@ const PanelsContainer = () => {
     return (
         <div className='panels-container'>
             <MapPanel
-                polygons={drawingMode === 'marker' ? [] : polygonsData ?? []}
+                polygons={drawingMode === 'marker' ? [] : polygons ?? []}
                 objects={drawingMode === 'polygon' ? [] : objects ?? []}
                 onPolygonClick={(polygon) => console.log('Polygon clicked:', polygon)}
                 onObjectClick={(object) => console.log('Object clicked:', object)}
@@ -71,11 +70,8 @@ const PanelsContainer = () => {
             <SideBar
                 setDrawingMode={setDrawingMode}
                 handleFinishPolygon={handleFinishPolygon}
-                polygons={polygonsData ?? []}
                 newPolygonCoordinates={newPolygonCoordinates}
             />
-
-
         </div>
     );
 }
