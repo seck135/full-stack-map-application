@@ -55,7 +55,7 @@ const MapPanel = ({
             <MapEventsHandler onMapClick={onMapClick} drawingMode={drawingMode} />
 
             {/* Mark the lines of Edited Polygon */}
-            {drawingMode !== 'polygon' && editedPointsToDisplay.length > 0 && (
+            {drawingMode === 'polygon' && editedPointsToDisplay.length > 0 && (
                 <Polyline
                     positions={editedPointsToDisplay.map((coord) => [coord.lat, coord.lon])}
                     pathOptions={{ color: 'red', dashArray: '5,10' }}
