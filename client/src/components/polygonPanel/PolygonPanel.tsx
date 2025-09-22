@@ -16,9 +16,6 @@ const PolygonPanel = ({ setDrawingMode, handleFinishPolygon, polygons, newPolygo
 
     const isNewPolygonNameEmpty = newPolygonName.trim().length === 0;
     const isThereCoordinates = newPolygonCoordinates.length > 2;
-    console.log("isNewPolygonNameEmpty", isNewPolygonNameEmpty);
-    console.log("isThereCoordinates", isThereCoordinates, newPolygonCoordinates);
-
 
     const handleSavePolygon = () => {
         handleFinishPolygon(newPolygonName);

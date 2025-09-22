@@ -3,14 +3,19 @@ import { v4 as uuidv4 } from 'uuid';
 import type { LatLng, ObjectMarker, Polygon } from '../types/types';
 import MapPanel from './map/MapPanel';
 import SideBar from './SideBar';
+import { usePolygons } from '../api/queries/polygons';
 
 const PanelsContainer = () => {
+    const { data: polygonsData, isLoading, error } = usePolygons();
+    console.log(polygonsData);
+    
+    
     const [polygons, setPolygons] = useState<Polygon[]>([]);
     const [objects, setObjects] = useState<ObjectMarker[]>([]);
     const [drawingMode, setDrawingMode] = useState<'polygon' | 'marker' | 'none'>('none');
     const [newPolygonCoordinates, setNewPolygonCoordinates] = useState<LatLng[]>([]);
     const [newName, setNewName] = useState<string>(''); // שם חדש לפוליגון/אובייקט
-    
+
     // לחיצה במפה
     const handleMapClick = (latlng: LatLng) => {
         if (drawingMode === 'marker') {
@@ -61,10 +66,10 @@ const PanelsContainer = () => {
                 newPolygonCoordinates={newPolygonCoordinates}
             />
 
-            
+
         </div>
     );
-}   
+}
 
 export default PanelsContainer;
 

@@ -38,7 +38,7 @@ export const useUpdatePolygon = () => {
       polygonsApi.update(id, polygon),
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ["polygons"] });
-      queryClient.invalidateQueries({ queryKey: ["polygons", data._id] });
+      queryClient.invalidateQueries({ queryKey: ["polygons", data.id] });
     },
   });
 };
