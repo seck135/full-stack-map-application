@@ -98,8 +98,6 @@ const PanelsContainer = () => {
             <MapPanel
                 polygons={drawingMode !== 'none' ? [] : polygons ?? []}
                 objects={drawingMode !== 'none' ? [] : objects ?? []}
-                // onPolygonClick={(polygon) => console.log('Polygon clicked:', polygon)}
-                // onObjectClick={(object) => console.log('Object clicked:', object)}
                 onMapClick={handleMapClick}
                 drawingMode={drawingMode}
                 editedPointsToDisplay={[

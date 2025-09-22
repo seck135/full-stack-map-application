@@ -80,7 +80,6 @@ const MapPanel = ({
                     key={polygon.id}
                     positions={polygon.coordinates.map((coord) => [coord.lat, coord.lon])}
                     pathOptions={{ color: 'blue' }}
-                    // eventHandlers={{ click: () => onPolygonClick(polygon) }}
                 >
                     <Popup>
                         <div className='map-panel--polygon-popup'>
@@ -95,7 +94,6 @@ const MapPanel = ({
                 <Marker
                     key={obj.id}
                     position={[obj.lat, obj.lon]}
-                    // eventHandlers={{ click: () => onObjectClick(obj) }}
                     icon={greenIcon}
                 >
                     <Popup>
