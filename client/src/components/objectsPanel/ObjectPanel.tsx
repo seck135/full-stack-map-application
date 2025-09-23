@@ -9,6 +9,7 @@ import type { Mode } from '../PanelsContainer';
 import ObjectListItem from './ObjectListItem';
 import { Select } from 'antd';
 import { IconNamesEnum, type IconNamesEnumKey } from '../enums/customSymbolsEnum';
+import CreateNewObjectForm from './CreateNewObjectForm';
 
 const { Option } = Select;
 
@@ -41,6 +42,7 @@ const ObjectPanel = ({ handleSaveObjectMarker }: ObjectPanelProps) => {
 
         handleSaveObjectMarker({ objectToSave: objectMarkerToSave, mode: { type: "create" } });
         setNewObjectName('');
+        setSelectedIcon('default')
     }
 
     const handleSaveEditedObject = ({ newNameToUpdate }: { newNameToUpdate: string }) => {
@@ -50,7 +52,7 @@ const ObjectPanel = ({ handleSaveObjectMarker }: ObjectPanelProps) => {
                 type: "Marker",
                 coordinates: objectDraftCoordinate ?? objectMarkerToEdit!.geometry.coordinates,
             },
-            symbolType: 'default' as IconNamesEnumKey,
+            symbolType: objectMarkerToEdit!.symbolType,
         }
         handleSaveObjectMarker({ objectToSave: objectMarkerToSave, mode: { type: "update", id: objectMarkerToEdit!.id } });
         setObjectMarkerToEdit(null);
@@ -61,64 +63,16 @@ const ObjectPanel = ({ handleSaveObjectMarker }: ObjectPanelProps) => {
         <div className="management-panel">
             <h2 className="management-panel--title">ניהול אובייקטים 🗺️</h2>
 
-            <div className="management-panel__controls">
-                <span className='management-panel__controls--description'>צור אובייקט חדש :</span>
-                <input
-                    type="text"
-                    placeholder="הזן שם אובייקט"
-                    value={newObjectName}
-                    onChange={(e) => setNewObjectName(e.target.value)}
-                    className="management-panel__controls__input"
-                />
-                <Popover
-                    content={isNewObjectNameEmpty ? "😕 נא להזין שם אובייקט" : "😊 מוכן לסימון קורדינטה"}
-                    trigger="hover"
-                    placement="top"
-                >
-                    <button
-                        disabled={isNewObjectNameEmpty}
-                        className="management-panel__controls__btn management-panel__controls__mark-coordinates-btn"
-                        onClick={() => dispatch(setDrawingMode('marker'))}
-                    >
-                        סמן אובייקט
-                    </button>
-                </Popover>
+            <CreateNewObjectForm
+                newObjectName={newObjectName}
+                setNewObjectName={setNewObjectName}
+                selectedIcon={selectedIcon}
+                setSelectedIcon={setSelectedIcon}
+                isNewObjectNameEmpty={isNewObjectNameEmpty}
+                isThereCoordinate={isThereCoordinate}
+                handleCreateObjectMarker={handleCreateObjectMarker}
+            />
 
-                <Select
-                    value={selectedIcon}
-                    className='management-panel__controls__btn management-panel__controls__select-marker-icon'
-                    onChange={(val: IconNamesEnumKey) => setSelectedIcon(val)}
-                >
-                    {Object.entries(IconNamesEnum).map(([key, hebrew]) => (
-                        <Option key={key} value={key}
-                            className={"management-panel__controls__btn management-panel__controls__select-marker-icon--option"}
-                        >
-                            {hebrew}
-                        </Option>
-                    ))}
-                </Select>
-
-                <Popover
-                    content={
-                        (!isThereCoordinate)
-                            ? "😕 נא לסמן אובייקט"
-                            : isNewObjectNameEmpty
-                                ? "😕 נא להזין שם אובייקט"
-                                : "😊 הכל מוכן לשמירה"
-                    }
-                    trigger="hover"
-                    placement="top"
-                >
-                    <button
-                        disabled={!isThereCoordinate || isNewObjectNameEmpty}
-                        className="management-panel__controls__btn management-panel__controls__create-btn"
-                        onClick={handleCreateObjectMarker}
-                    >
-                        שמור
-                    </button>
-                </Popover>
-
-            </div>
 
             <ul className="management-panel__polygon-list">
                 {([...(objects ?? [])].reverse()).map(objectMarker => {
