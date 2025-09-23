@@ -28,14 +28,13 @@ const CreateObjectForm = ({
     const dispatch = useDispatch()
 
     return (
-        <div className="management-panel__controls">
-            <span className='management-panel__controls--description'>צור אובייקט חדש :</span>
+        <div className="create-form">
             <input
                 type="text"
                 placeholder="הזן שם אובייקט"
                 value={newObjectName}
                 onChange={(e) => setNewObjectName(e.target.value)}
-                className="management-panel__controls__input"
+                className="create-form__input"
             />
             <Popover
                 content={isNewObjectNameEmpty ? "😕 נא להזין שם אובייקט" : "😊 מוכן לסימון קורדינטה"}
@@ -44,7 +43,7 @@ const CreateObjectForm = ({
             >
                 <button
                     disabled={isNewObjectNameEmpty}
-                    className="management-panel__controls__btn management-panel__controls__mark-coordinates-btn"
+                    className="create-form__btn create-form__mark-coordinates-btn"
                     onClick={() => dispatch(setDrawingMode('marker'))}
                 >
                     סמן אובייקט
@@ -58,12 +57,12 @@ const CreateObjectForm = ({
                 <Select
                     title="בחר אייקון"
                     value={selectedIcon}
-                    className='management-panel__controls__btn management-panel__controls__select-marker-icon'
+                    className='create-form__btn create-form__select-marker-icon'
                     onChange={(val: IconNamesEnumKey) => setSelectedIcon(val)}
                 >
                     {Object.entries(IconNamesEnum).map(([key, hebrew]) => (
                         <Option key={key} value={key}
-                            className={"management-panel__controls__btn management-panel__controls__select-marker-icon--option"}
+                            className={"create-form__btn create-form__select-marker-icon--option"}
                         >
                             {hebrew}
                         </Option>
@@ -85,10 +84,10 @@ const CreateObjectForm = ({
             >
                 <button
                     disabled={!isThereCoordinate || isNewObjectNameEmpty}
-                    className="management-panel__controls__btn management-panel__controls__create-btn"
+                    className="create-form__btn create-form__save-btn"
                     onClick={handleCreateObjectMarker}
                 >
-                    שמור
+                    שמור חדש
                 </button>
             </Popover>
         </div>

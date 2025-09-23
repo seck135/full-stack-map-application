@@ -1,3 +1,103 @@
 .create-form {
-    
+    display: flex;
+    gap: 1.9rem;
+
+    height: 3.6rem;
+    overflow: hidden;
+
+    margin-bottom: 1.6rem;
+
+    $padding-top-bottom: 0.6rem;
+
+    &__input {
+        width: 18rem;
+        padding: $padding-top-bottom 0.8rem;
+
+        border-radius: 0.4rem;
+        border: 0.2rem solid #ccc;
+        font-size: 2rem;
+        outline: none;
+        transition: all 0.2s ease-out;
+
+        &:focus {
+            border-color: #008cba;
+            box-shadow: 0 0 5px rgba(0, 140, 186, 0.5);
+        }
+    }
+
+    &__btn {
+        padding: $padding-top-bottom 1.2rem;
+
+        white-space: nowrap;
+        color: #fff;
+        border: none;
+        border-radius: 0.4rem;
+        cursor: pointer;
+        transition: background-color 0.2s, transform 0.1s;
+        font-size: 2.0rem;
+
+        &:active {
+            transform: scale(0.98);
+        }
+
+        &:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+
+            &:hover,
+            &:active {
+                background-color: #ccc;
+            }
+        }
+
+    }
+
+    &__mark-coordinates-btn {
+        height: -webkit-fill-available;
+        width: 12rem;
+
+        align-self: center;
+        background-color: #008cba;
+
+        &:hover {
+            background-color: #007bb5;
+        }
+
+        &:active {
+            background-color: #006a99;
+        }
+    }
+
+    &__select-marker-icon {
+        height: -webkit-fill-available !important;
+        width: 20rem;
+        padding: 0;
+
+        align-self: center;
+
+        .ant-select-selection-item {
+            font-size: 2.0rem;
+        }
+
+        &--option {
+            direction: rtl;
+            font-size: 1.9rem !important;
+        }
+    }
+
+    &__save-btn {
+        height: -webkit-fill-available;
+        width: 12rem;
+
+        align-self: center;
+        background-color: #4caf50;
+
+        &:hover {
+            background-color: #45a049;
+        }
+
+        &:active {
+            background-color: #3e8e41;
+        }
+    }
 }

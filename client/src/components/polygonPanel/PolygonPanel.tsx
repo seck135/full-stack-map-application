@@ -1,13 +1,11 @@
-import { Popover } from 'antd';
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { usePolygons } from '../../api/queries/polygons';
 import type { RootState } from '../../store';
-import { setDrawingMode } from '../../store/draftCoordinatesSlice';
 import type { IPolygonCreate, Polygon } from '../../types/types';
 import type { Mode } from '../PanelsContainer';
-import PolygonListItem from './PolygonListItem';
 import CreatePolygonForm from './CreatePolygonForm';
+import PolygonListItem from './PolygonListItem';
 
 
 interface PolygonPanelProps {

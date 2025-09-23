@@ -20,14 +20,13 @@ const CreatePolygonForm = ({
     const dispatch = useDispatch()
 
     return (
-        <div className="management-panel__controls">
-            <span className='management-panel__controls--description'>צור פוליגון חדש :</span>
+        <div className="create-form">
             <input
                 type="text"
                 placeholder="הזן שם פוליגון"
                 value={newPolygonName}
                 onChange={(e) => setNewPolygonName(e.target.value)}
-                className="management-panel__controls__input"
+                className="create-form__input"
             />
             <Popover
                 content={isNewPolygonNameEmpty ? "😕 נא להזין שם פוליגון" : "😊 מוכן לסימון קורדינטות"}
@@ -36,7 +35,7 @@ const CreatePolygonForm = ({
             >
                 <button
                     disabled={isNewPolygonNameEmpty}
-                    className="management-panel__controls__btn management-panel__controls__mark-coordinates-btn"
+                    className="create-form__btn create-form__mark-coordinates-btn"
                     onClick={() => dispatch(setDrawingMode('polygon'))}
                 >
                     סמן פוליגון
@@ -56,10 +55,10 @@ const CreatePolygonForm = ({
             >
                 <button
                     disabled={!isThereCoordinates || isNewPolygonNameEmpty}
-                    className="management-panel__controls__btn management-panel__controls__create-btn"
+                    className="create-form__btn create-form__save-btn"
                     onClick={handleCreatePolygon}
                 >
-                    שמור
+                    שמור חדש
                 </button>
             </Popover>
 
