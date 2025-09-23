@@ -1,9 +1,9 @@
-import L, { type LatLngTuple } from 'leaflet';
+import { type LatLngTuple } from 'leaflet';
 import 'leaflet/dist/leaflet.css';
+import { useMemo } from 'react';
 import { Polygon as LeafletPolygon, MapContainer, Marker, Polyline, Popup, TileLayer, useMapEvents } from 'react-leaflet';
 import type { Coordinate, ObjectMarker, Polygon } from '../../types/types';
-import { greenIcon, redIcon } from './icons';
-import { useMemo } from 'react';
+import { customSymbols, greenIcon, redIcon } from './icons';
 
 interface MapPanelProps {
     polygons: Polygon[];
@@ -17,15 +17,6 @@ type MapEventsHandlerProps = {
     onMapClick: (latlng: Coordinate) => void;
     drawingMode: 'polygon' | 'marker' | 'none';
 };
-
-// תיקון אייקון ברירת מחדל
-delete (L.Icon.Default.prototype as any)._getIconUrl;
-L.Icon.Default.mergeOptions({
-    iconRetinaUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon-2x.png',
-    iconUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png',
-    shadowUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-shadow.png',
-});
-
 
 const MapEventsHandler = ({ onMapClick, drawingMode }: MapEventsHandlerProps) => {
     useMapEvents({
@@ -44,9 +35,10 @@ const MapPanel = ({
     drawingMode,
     onMapClick,
     editedPointsToDisplay,
-}: MapPanelProps) => {    
+}: MapPanelProps) => {
 
     const mapCenter = { lat: 31.7683, lon: 35.2137 };
+    const ICON_PX_SIZE = 24
 
     // ---- leatlet expects [lat, lon] instaed of [lon, lat]
     // Convert edited points from [lon, lat] → [ lat, lon ] 
@@ -66,6 +58,8 @@ const MapPanel = ({
             },
         }));
     }, [polygons]);
+
+
 
     return (
         <MapContainer className='map-panel' center={[mapCenter.lat, mapCenter.lon]} zoom={13}>
@@ -111,21 +105,29 @@ const MapPanel = ({
             ))}
 
             {/* Objects Marker */}
-            {objects.map((obj) => (
-                <Marker
-                    key={obj.id}
-                    position={[obj.geometry.coordinates[1], obj.geometry.coordinates[0]]} // [lat, lon]
-                    icon={greenIcon}
-                >
-                    <Popup>
-                        <div className='map-panel--object-marker-popup'>
-                            {obj.name}
-                        </div>
-                    </Popup>
-                </Marker>
+            {objects.map((obj) => {
+                const isCustomSymbol =
+                    typeof obj.symbolType === 'string' &&
+                    obj.symbolType in customSymbols;
 
-            ))}
+                const icon = isCustomSymbol
+                    ? customSymbols[obj.symbolType as keyof typeof customSymbols]
+                    : greenIcon;
 
+                return (
+                    <Marker
+                        key={obj.id}
+                        position={[obj.geometry.coordinates[1], obj.geometry.coordinates[0]]}
+                        icon={icon}
+                    >
+                        <Popup offset={isCustomSymbol ? [0, -ICON_PX_SIZE / 2] : undefined}>
+                            <div className='map-panel--object-marker-popup'>
+                                {obj.name}
+                            </div>
+                        </Popup>
+                    </Marker>
+                );
+            })}
         </MapContainer>
     );
 };
