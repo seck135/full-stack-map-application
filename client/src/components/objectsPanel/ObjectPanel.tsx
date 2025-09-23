@@ -1,17 +1,12 @@
-import { Popover } from 'antd';
 import { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { useObjects } from '../../api/queries/objects';
 import type { RootState } from '../../store';
-import { setDrawingMode } from '../../store/draftCoordinatesSlice';
 import type { IObjectCreate, ObjectMarker } from '../../types/types';
+import { type IconNamesEnumKey } from '../enums/customSymbolsEnum';
 import type { Mode } from '../PanelsContainer';
-import ObjectListItem from './ObjectListItem';
-import { Select } from 'antd';
-import { IconNamesEnum, type IconNamesEnumKey } from '../enums/customSymbolsEnum';
 import CreateNewObjectForm from './CreateNewObjectForm';
-
-const { Option } = Select;
+import ObjectListItem from './ObjectListItem';
 
 
 interface ObjectPanelProps {
@@ -19,7 +14,6 @@ interface ObjectPanelProps {
 }
 
 const ObjectPanel = ({ handleSaveObjectMarker }: ObjectPanelProps) => {
-    const dispatch = useDispatch()
     const { objectDraftCoordinate } = useSelector((state: RootState) => state.draftCoordinates);
     const { data: objects } = useObjects();
 
