@@ -7,7 +7,7 @@ export interface IObjectCreate {
     type: string;
     coordinates: Coordinate; // [lon, lat] 
   };
-  symbolType: string | null;
+  symbolType: string;
 }
 
 export interface IPolygonCreate {

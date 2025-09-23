@@ -6,7 +6,7 @@ export interface ObjectItemDocument extends Document {
     type: "Marker";                 
     coordinates: [number, number]; // [lon, lat] 
   };
-  symbolType: string | null;
+  symbolType: string;
 }
 
 const objectItemSchema = new Schema<ObjectItemDocument>(
@@ -16,7 +16,7 @@ const objectItemSchema = new Schema<ObjectItemDocument>(
       type: { type: String, enum: ["Marker"], default: "Marker" },
       coordinates: { type: [Number], required: true }, // [lon, lat]
     },
-    symbolType: { type: String, default: null },
+    symbolType: { type: String, default: 'default' },
   },
   {
     collection: "objects",

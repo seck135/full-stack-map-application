@@ -7,6 +7,10 @@ import { setDrawingMode } from '../../store/draftCoordinatesSlice';
 import type { IObjectCreate, ObjectMarker } from '../../types/types';
 import type { Mode } from '../PanelsContainer';
 import ObjectListItem from './ObjectListItem';
+import { Select } from 'antd';
+import { IconNamesEnum, type IconNamesEnumKey } from '../enums/customSymbolsEnum';
+
+const { Option } = Select;
 
 
 interface ObjectPanelProps {
@@ -16,11 +20,11 @@ interface ObjectPanelProps {
 const ObjectPanel = ({ handleSaveObjectMarker }: ObjectPanelProps) => {
     const dispatch = useDispatch()
     const { objectDraftCoordinate } = useSelector((state: RootState) => state.draftCoordinates);
-
     const { data: objects } = useObjects();
 
     const [newObjectName, setNewObjectName] = useState('');
     const [objectMarkerToEdit, setObjectMarkerToEdit] = useState<ObjectMarker | null>(null);
+    const [selectedIcon, setSelectedIcon] = useState<IconNamesEnumKey>('default');
 
     const isNewObjectNameEmpty = newObjectName.trim().length === 0;
     const isThereCoordinate = objectDraftCoordinate !== null;
@@ -28,13 +32,13 @@ const ObjectPanel = ({ handleSaveObjectMarker }: ObjectPanelProps) => {
     const handleCreateObjectMarker = () => {
         const objectMarkerToSave: IObjectCreate = {
             name: newObjectName,
-            geometry: { 
-                type: "Marker", 
+            geometry: {
+                type: "Marker",
                 coordinates: objectDraftCoordinate!,
             },
-            symbolType: null,
+            symbolType: selectedIcon,
         }
-        
+
         handleSaveObjectMarker({ objectToSave: objectMarkerToSave, mode: { type: "create" } });
         setNewObjectName('');
     }
@@ -42,11 +46,11 @@ const ObjectPanel = ({ handleSaveObjectMarker }: ObjectPanelProps) => {
     const handleSaveEditedObject = ({ newNameToUpdate }: { newNameToUpdate: string }) => {
         const objectMarkerToSave: IObjectCreate = {
             name: newNameToUpdate,
-            geometry: { 
-                type: "Marker", 
+            geometry: {
+                type: "Marker",
                 coordinates: objectDraftCoordinate ?? objectMarkerToEdit!.geometry.coordinates,
             },
-            symbolType: null,
+            symbolType: 'default' as IconNamesEnumKey,
         }
         handleSaveObjectMarker({ objectToSave: objectMarkerToSave, mode: { type: "update", id: objectMarkerToEdit!.id } });
         setObjectMarkerToEdit(null);
@@ -71,16 +75,28 @@ const ObjectPanel = ({ handleSaveObjectMarker }: ObjectPanelProps) => {
                     trigger="hover"
                     placement="top"
                 >
-                    <span>
-                        <button
-                            disabled={isNewObjectNameEmpty}
-                            className="management-panel__controls__btn management-panel__controls__mark-coordinates-btn"
-                            onClick={() => dispatch(setDrawingMode('marker'))}
-                        >
-                            סמן אובייקט
-                        </button>
-                    </span>
+                    <button
+                        disabled={isNewObjectNameEmpty}
+                        className="management-panel__controls__btn management-panel__controls__mark-coordinates-btn"
+                        onClick={() => dispatch(setDrawingMode('marker'))}
+                    >
+                        סמן אובייקט
+                    </button>
                 </Popover>
+
+                <Select
+                    value={selectedIcon}
+                    className='management-panel__controls__btn management-panel__controls__select-marker-icon'
+                    onChange={(val: IconNamesEnumKey) => setSelectedIcon(val)}
+                >
+                    {Object.entries(IconNamesEnum).map(([key, hebrew]) => (
+                        <Option key={key} value={key}
+                            className={"management-panel__controls__btn management-panel__controls__select-marker-icon--option"}
+                        >
+                            {hebrew}
+                        </Option>
+                    ))}
+                </Select>
 
                 <Popover
                     content={
@@ -93,15 +109,13 @@ const ObjectPanel = ({ handleSaveObjectMarker }: ObjectPanelProps) => {
                     trigger="hover"
                     placement="top"
                 >
-                    <span>
-                        <button
-                            disabled={!isThereCoordinate || isNewObjectNameEmpty}
-                            className="management-panel__controls__btn management-panel__controls__create-btn"
-                            onClick={handleCreateObjectMarker}
-                        >
-                            שמור
-                        </button>
-                    </span>
+                    <button
+                        disabled={!isThereCoordinate || isNewObjectNameEmpty}
+                        className="management-panel__controls__btn management-panel__controls__create-btn"
+                        onClick={handleCreateObjectMarker}
+                    >
+                        שמור
+                    </button>
                 </Popover>
 
             </div>

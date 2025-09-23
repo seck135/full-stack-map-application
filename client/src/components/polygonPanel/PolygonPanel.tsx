@@ -68,15 +68,13 @@ const PolygonPanel = ({ handleSavePolygon, }: PolygonPanelProps) => {
                     trigger="hover"
                     placement="top"
                 >
-                    <span>
-                        <button
-                            disabled={isNewPolygonNameEmpty}
-                            className="management-panel__controls__btn management-panel__controls__mark-coordinates-btn"
-                            onClick={() => dispatch(setDrawingMode('polygon'))}
-                        >
-                            סמן פוליגון
-                        </button>
-                    </span>
+                    <button
+                        disabled={isNewPolygonNameEmpty}
+                        className="management-panel__controls__btn management-panel__controls__mark-coordinates-btn"
+                        onClick={() => dispatch(setDrawingMode('polygon'))}
+                    >
+                        סמן פוליגון
+                    </button>
                 </Popover>
 
                 <Popover
@@ -90,15 +88,13 @@ const PolygonPanel = ({ handleSavePolygon, }: PolygonPanelProps) => {
                     trigger="hover"
                     placement="top"
                 >
-                    <span>
-                        <button
-                            disabled={!isThereCoordinates || isNewPolygonNameEmpty}
-                            className="management-panel__controls__btn management-panel__controls__create-btn"
-                            onClick={handleCreatePolygon}
-                        >
-                            שמור
-                        </button>
-                    </span>
+                    <button
+                        disabled={!isThereCoordinates || isNewPolygonNameEmpty}
+                        className="management-panel__controls__btn management-panel__controls__create-btn"
+                        onClick={handleCreatePolygon}
+                    >
+                        שמור
+                    </button>
                 </Popover>
 
             </div>

@@ -23,8 +23,8 @@ export function validateObjectItem(req: Request, res: Response, next: NextFuncti
         return res.status(400).json({ message: "Invalid coordinates. Must be an array of [lon, lat]." });
     }
 
-    if (symbolType !== null && typeof symbolType !== "string") {
-        return res.status(400).json({ message: "Invalid symbolType. Must be a string or null." });
+    if (typeof symbolType !== "string") {
+        return res.status(400).json({ message: "Invalid symbolType. Must be a string." });
     }
 
     // If everything is valid, next

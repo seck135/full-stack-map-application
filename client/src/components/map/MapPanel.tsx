@@ -3,7 +3,8 @@ import 'leaflet/dist/leaflet.css';
 import { useMemo } from 'react';
 import { Polygon as LeafletPolygon, MapContainer, Marker, Polyline, Popup, TileLayer, useMapEvents } from 'react-leaflet';
 import type { Coordinate, ObjectMarker, Polygon } from '../../types/types';
-import { customSymbols, greenIcon, redIcon } from './icons';
+import type { IconNamesEnumKey } from '../enums/customSymbolsEnum';
+import { customSymbols, ICON_PX_SIZE, redIcon } from './icons';
 
 interface MapPanelProps {
     polygons: Polygon[];
@@ -38,7 +39,6 @@ const MapPanel = ({
 }: MapPanelProps) => {
 
     const mapCenter = { lat: 31.7683, lon: 35.2137 };
-    const ICON_PX_SIZE = 24
 
     // ---- leatlet expects [lat, lon] instaed of [lon, lat]
     // Convert edited points from [lon, lat] → [ lat, lon ] 
@@ -105,29 +105,23 @@ const MapPanel = ({
             ))}
 
             {/* Objects Marker */}
-            {objects.map((obj) => {
-                const isCustomSymbol =
-                    typeof obj.symbolType === 'string' &&
-                    obj.symbolType in customSymbols;
-
-                const icon = isCustomSymbol
-                    ? customSymbols[obj.symbolType as keyof typeof customSymbols]
-                    : greenIcon;
-
-                return (
-                    <Marker
-                        key={obj.id}
-                        position={[obj.geometry.coordinates[1], obj.geometry.coordinates[0]]}
-                        icon={icon}
-                    >
-                        <Popup offset={isCustomSymbol ? [0, -ICON_PX_SIZE / 2] : undefined}>
-                            <div className='map-panel--object-marker-popup'>
-                                {obj.name}
-                            </div>
-                        </Popup>
-                    </Marker>
-                );
-            })}
+            {objects.map((obj) => (
+                <Marker
+                    key={obj.id}
+                    position={[obj.geometry.coordinates[1], obj.geometry.coordinates[0]]}
+                    icon={customSymbols[obj.symbolType as keyof typeof customSymbols]}
+                >
+                    <Popup offset={
+                        obj.symbolType === 'default' as IconNamesEnumKey
+                            ? [0, 0]
+                            : [0, -ICON_PX_SIZE / 2]
+                    }>
+                        <div className='map-panel--object-marker-popup'>
+                            {obj.name}
+                        </div>
+                    </Popup>
+                </Marker>
+            ))}
         </MapContainer>
     );
 };

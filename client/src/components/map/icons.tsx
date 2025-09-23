@@ -34,6 +34,7 @@ export const greenIcon = new L.Icon({
   shadowSize: [41, 41],
 });
 
+export const ICON_PX_SIZE = 24
 // Helper function
 const createCustomIcon = (icon: React.ReactElement, size = 24) => {
   return L.divIcon({
@@ -46,14 +47,15 @@ const createCustomIcon = (icon: React.ReactElement, size = 24) => {
 
 // If adding icon so to update the key in IconNames
 export const customSymbols = {
-  coffee: createCustomIcon(<FaCoffee className='map-react-icon' color="brown" />),
-  car: createCustomIcon(<FaCar className='map-react-icon' color="blue" />),
-  tree: createCustomIcon(<FaTree className='map-react-icon' color="green" />),
-  hospital: createCustomIcon(<FaHospital className='map-react-icon' color="red" />),
-  school: createCustomIcon(<FaSchool className='map-react-icon' color="orange" />),
-  home: createCustomIcon(<FaHome className='map-react-icon' color="purple" />),
-  shopping: createCustomIcon(<FaShoppingCart className='map-react-icon' color="teal" />),
-  restaurant: createCustomIcon(<FaUtensils className='map-react-icon' color="darkred" />),
-  info: createCustomIcon(<FaInfoCircle className='map-react-icon' color="grey" />),
+  default: greenIcon,
+  coffee: createCustomIcon(<FaCoffee className='map-react-icon' color="darkgreen" />),
+  car: createCustomIcon(<FaCar className='map-react-icon' color="darkgreen" />),
+  tree: createCustomIcon(<FaTree className='map-react-icon' color="darkgreen" />),
+  hospital: createCustomIcon(<FaHospital className='map-react-icon' color="darkgreen" />),
+  school: createCustomIcon(<FaSchool className='map-react-icon' color="darkgreen" />),
+  home: createCustomIcon(<FaHome className='map-react-icon' color="darkgreen" />),
+  shopping: createCustomIcon(<FaShoppingCart className='map-react-icon' color="darkgreen" />),
+  restaurant: createCustomIcon(<FaUtensils className='map-react-icon' color="darkgreen" />),
+  info: createCustomIcon(<FaInfoCircle className='map-react-icon' color="darkgreen" />),
   bicycle: createCustomIcon(<FaBicycle className='map-react-icon' color="darkgreen" />),
 };
