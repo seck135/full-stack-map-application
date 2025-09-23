@@ -1,21 +1,28 @@
-export interface Coordinate {
-    lat: number;
-    lon: number;
+export type Coordinate = [number, number];
+
+export interface IObjectCreate {
+  name: string;
+  // GeoJSON type
+  geometry: {
+    type: string;
+    coordinates: Coordinate; // [lon, lat] 
+  };
+  symbolType: string | null;
 }
 
 export interface IPolygonCreate {
-    name: string;
-    coordinates: Coordinate[];
-}
-
-export interface IObjectCreate extends Coordinate {
-    name: string;
-}
-
-export interface Polygon extends IPolygonCreate {
-    id: string;
+  name: string;
+  // GeoJSON type
+  geometry: {
+    type: string;
+    coordinates: Coordinate[][]; // array of rings, each ring is array of points
+  };
 }
 
 export interface ObjectMarker extends IObjectCreate {
-    id: string;
+  id: string;
+}
+
+export interface Polygon extends IPolygonCreate {
+  id: string;
 }

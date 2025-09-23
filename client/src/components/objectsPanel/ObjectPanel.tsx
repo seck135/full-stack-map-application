@@ -28,9 +28,13 @@ const ObjectPanel = ({ handleSaveObjectMarker }: ObjectPanelProps) => {
     const handleCreateObjectMarker = () => {
         const objectMarkerToSave: IObjectCreate = {
             name: newObjectName,
-            lat: objectDraftCoordinate!.lat,
-            lon: objectDraftCoordinate!.lon,
+            geometry: { 
+                type: "Marker", 
+                coordinates: objectDraftCoordinate!,
+            },
+            symbolType: null,
         }
+        
         handleSaveObjectMarker({ objectToSave: objectMarkerToSave, mode: { type: "create" } });
         setNewObjectName('');
     }
@@ -38,8 +42,11 @@ const ObjectPanel = ({ handleSaveObjectMarker }: ObjectPanelProps) => {
     const handleSaveEditedObject = ({ newNameToUpdate }: { newNameToUpdate: string }) => {
         const objectMarkerToSave: IObjectCreate = {
             name: newNameToUpdate,
-            lat: objectDraftCoordinate ? objectDraftCoordinate!.lat : objectMarkerToEdit?.lat!,
-            lon: objectDraftCoordinate ? objectDraftCoordinate!.lon : objectMarkerToEdit?.lon!,
+            geometry: { 
+                type: "Marker", 
+                coordinates: objectDraftCoordinate ?? objectMarkerToEdit!.geometry.coordinates,
+            },
+            symbolType: null,
         }
         handleSaveObjectMarker({ objectToSave: objectMarkerToSave, mode: { type: "update", id: objectMarkerToEdit!.id } });
         setObjectMarkerToEdit(null);

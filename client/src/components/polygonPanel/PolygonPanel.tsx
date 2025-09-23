@@ -29,7 +29,10 @@ const PolygonPanel = ({ handleSavePolygon, }: PolygonPanelProps) => {
     const handleCreatePolygon = () => {
         const polygonToSave = {
             name: newPolygonName,
-            coordinates: polygonDraftCoordinates,
+            geometry: {
+                type: "Polygon",
+                coordinates: [polygonDraftCoordinates],
+            },
         }
         handleSavePolygon({ polygonToSave, mode: { type: "create" } });
         setNewPolygonName('');
@@ -38,7 +41,10 @@ const PolygonPanel = ({ handleSavePolygon, }: PolygonPanelProps) => {
     const handleSaveEditedPolygon = ({ newNameToUpdate }: { newNameToUpdate: string }) => {
         const polygonToSave = {
             name: newNameToUpdate,
-            coordinates: polygonDraftCoordinates.length ? polygonDraftCoordinates : polygonToEdit?.coordinates!,
+            geometry: {
+                type: "Polygon",
+                coordinates: polygonDraftCoordinates.length ? [polygonDraftCoordinates] : polygonToEdit?.geometry.coordinates ?? [],
+            },
         }
         handleSavePolygon({ polygonToSave, mode: { type: "update", id: polygonToEdit!.id } });
         setPolygonToEdit(null);

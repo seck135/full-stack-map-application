@@ -39,6 +39,7 @@ const ObjectListItem = ({ objectMarker, isObjectToEdit, handleSaveEditedObject, 
                         : "list-item__update-coordinates-btn--disabled"
                 )}
                 onClick={() => dispatch(setDrawingMode('marker'))}
+                disabled={!isObjectToEdit}
             >
                 {"לחץ כדי לעדכן מיקום"}
             </button>

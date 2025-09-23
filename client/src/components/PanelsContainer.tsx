@@ -14,8 +14,8 @@ export type Mode =
 const PanelsContainer = () => {
     const dispatch = useDispatch()
 
-    const { data: polygons, isLoading: polygonsIsLoading, error: polygonsError } = usePolygons();
-    const { data: objects, isLoading: objectsIsLoading, error: objectsError } = useObjects();
+    const { data: polygons } = usePolygons();
+    const { data: objects } = useObjects();
     const createPolygon = useCreatePolygon();
     const updatePolygon = useUpdatePolygon();
     const createObject = useCreateObject();
@@ -26,23 +26,15 @@ const PanelsContainer = () => {
     // Click on map handler
     const handleMapClick = (coordinate: Coordinate) => {
         if (drawingMode === 'marker') {
-            setObjectDraftCoordinate(coordinate);
             dispatch(setObjectDraftCoordinate(coordinate));
-
         } else if (drawingMode === 'polygon') {
-            // setPolygonDraftCoordinates((prev) => [...prev, coordinate]);
             dispatch(addPolygonDraftCoordinate(coordinate))
         }
     };
 
     const handleSavePolygon = ({ polygonToSave, mode }: { polygonToSave: IPolygonCreate, mode: Mode }) => {
-        const polygonData: IPolygonCreate = {
-            name: polygonToSave.name,
-            coordinates: polygonToSave.coordinates,
-        };
-
         if (mode.type === "create") {
-            createPolygon.mutate(polygonData, {
+            createPolygon.mutate(polygonToSave, {
                 onSuccess: (data) => {
                     console.log("Polygon created:", data);
                     dispatch(setDrawingMode("none"))
@@ -51,7 +43,7 @@ const PanelsContainer = () => {
             });
         } else if (mode.type === "update") {
             updatePolygon.mutate(
-                { id: mode.id, polygon: polygonData },
+                { id: mode.id, polygon: polygonToSave },
                 {
                     onSuccess: (data) => {
                         console.log("Polygon updated:", data);
@@ -64,14 +56,8 @@ const PanelsContainer = () => {
     };
 
     const handleSaveObjectMarker = ({ objectToSave, mode }: { objectToSave: IObjectCreate, mode: Mode }) => {
-        const objectData: IObjectCreate = {
-            name: objectToSave.name,
-            lat: objectToSave.lat,
-            lon: objectToSave.lon,
-        };
-
         if (mode.type === "create") {
-            createObject.mutate(objectData, {
+            createObject.mutate(objectToSave, {
                 onSuccess: (data) => {
                     console.log("Object created:", data);
                     dispatch(setDrawingMode('none'))
@@ -80,7 +66,7 @@ const PanelsContainer = () => {
             });
         } else if (mode.type === "update") {
             updateObject.mutate(
-                { id: mode.id, objectMarker: objectData },
+                { id: mode.id, objectMarker: objectToSave },
                 {
                     onSuccess: (data) => {
                         console.log("Object updated:", data);

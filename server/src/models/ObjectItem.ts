@@ -1,28 +1,34 @@
 import { Document, Schema, model } from "mongoose";
 
 export interface ObjectItemDocument extends Document {
-    name: string;
-    lat: number;
-    lon: number;
+  name: string;
+  geometry: { // -- GeoJSON type
+    type: "Marker";                 
+    coordinates: [number, number]; // [lon, lat] 
+  };
+  symbolType: string | null;
 }
 
 const objectItemSchema = new Schema<ObjectItemDocument>(
-    {
-        name: { type: String, required: true },
-        lat: { type: Number, required: true },
-        lon: { type: Number, required: true },
+  {
+    name: { type: String, required: true },
+    geometry: {
+      type: { type: String, enum: ["Marker"], default: "Marker" },
+      coordinates: { type: [Number], required: true }, // [lon, lat]
     },
-    {
-        collection: "objects",
-        versionKey: false,
-        toJSON: {
-            virtuals: true, // include virtuals
-            transform: (_, ret) => {
-                ret.id = ret._id; // copy _id to id
-                delete ret._id;   // remove _id
-            },
-        },
-    }
+    symbolType: { type: String, default: null },
+  },
+  {
+    collection: "objects",
+    versionKey: false,
+    toJSON: {
+      virtuals: true, // include virtuals
+      transform: (_, ret) => {
+        ret.id = ret._id; // copy _id to id
+        delete ret._id;   // remove _id
+      },
+    },
+  }
 );
 
 export const ObjectItem = model<ObjectItemDocument>("ObjectItem", objectItemSchema);

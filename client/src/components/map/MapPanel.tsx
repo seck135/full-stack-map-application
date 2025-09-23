@@ -1,8 +1,9 @@
-import L from 'leaflet';
+import L, { type LatLngTuple } from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { Polygon as LeafletPolygon, MapContainer, Marker, Polyline, Popup, TileLayer, useMapEvents } from 'react-leaflet';
 import type { Coordinate, ObjectMarker, Polygon } from '../../types/types';
 import { greenIcon, redIcon } from './icons';
+import { useMemo } from 'react';
 
 interface MapPanelProps {
     polygons: Polygon[];
@@ -30,7 +31,7 @@ const MapEventsHandler = ({ onMapClick, drawingMode }: MapEventsHandlerProps) =>
     useMapEvents({
         click(e) {
             if (drawingMode === 'marker' || drawingMode === 'polygon') {
-                onMapClick({ lat: e.latlng.lat, lon: e.latlng.lng });
+                onMapClick([e.latlng.lng, e.latlng.lat]);
             }
         },
     });
@@ -43,8 +44,28 @@ const MapPanel = ({
     drawingMode,
     onMapClick,
     editedPointsToDisplay,
-}: MapPanelProps) => {
-    const mapCenter: Coordinate = { lat: 31.7683, lon: 35.2137 };
+}: MapPanelProps) => {    
+
+    const mapCenter = { lat: 31.7683, lon: 35.2137 };
+
+    // ---- leatlet expects [lat, lon] instaed of [lon, lat]
+    // Convert edited points from [lon, lat] → [ lat, lon ] 
+    const swappedEditedPoints = useMemo(() => {
+        return editedPointsToDisplay.map(([lon, lat]) => ([lat, lon] as LatLngTuple));
+    }, [editedPointsToDisplay]);
+
+    // Convert polygons from GeoJSON [lon, lat] → [ lat, lon ]
+    const swappedPolygons = useMemo(() => {
+        return polygons.map((polygon) => ({
+            ...polygon,
+            geometry: {
+                ...polygon.geometry,
+                coordinates: polygon.geometry.coordinates.map((ring) =>
+                    ring.map(([lon, lat]) => ([lat, lon] as LatLngTuple))
+                ),
+            },
+        }));
+    }, [polygons]);
 
     return (
         <MapContainer className='map-panel' center={[mapCenter.lat, mapCenter.lon]} zoom={13}>
@@ -55,19 +76,19 @@ const MapPanel = ({
             <MapEventsHandler onMapClick={onMapClick} drawingMode={drawingMode} />
 
             {/* Mark the lines of Edited Polygon */}
-            {drawingMode === 'polygon' && editedPointsToDisplay.length > 0 && (
+            {drawingMode === 'polygon' && swappedEditedPoints.length > 0 && (
                 <Polyline
-                    positions={editedPointsToDisplay.map((coord) => [coord.lat, coord.lon])}
+                    positions={swappedEditedPoints}
                     pathOptions={{ color: 'red', dashArray: '5,10' }}
                 />
             )}
 
             {/* Show points while drawing/editing */}
             {drawingMode !== 'none' &&
-                editedPointsToDisplay.map((coord, index) => (
+                swappedEditedPoints.map((coord, index) => (
                     <Marker
                         key={`temp-${index}`}
-                        position={[coord.lat, coord.lon]}
+                        position={coord}
                         icon={redIcon}
                     >
                         <Popup>Point {index + 1}</Popup>
@@ -75,10 +96,10 @@ const MapPanel = ({
                 ))}
 
             {/* Polygons */}
-            {polygons.map((polygon) => (
+            {swappedPolygons.map((polygon) => (
                 <LeafletPolygon
                     key={polygon.id}
-                    positions={polygon.coordinates.map((coord) => [coord.lat, coord.lon])}
+                    positions={polygon.geometry.coordinates}
                     pathOptions={{ color: 'blue' }}
                 >
                     <Popup>
@@ -93,7 +114,7 @@ const MapPanel = ({
             {objects.map((obj) => (
                 <Marker
                     key={obj.id}
-                    position={[obj.lat, obj.lon]}
+                    position={[obj.geometry.coordinates[1], obj.geometry.coordinates[0]]} // [lat, lon]
                     icon={greenIcon}
                 >
                     <Popup>

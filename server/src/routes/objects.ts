@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { ObjectItem } from "../models/ObjectItem";
+import { validateObjectItem } from "../validations/objectValidate";
 
 const router = Router();
 
@@ -17,19 +18,27 @@ router.get("/:id", async (req, res) => {
 });
 
 // POST (create) new object
-router.post("/", async (req, res) => {
-    const { name, lat, lon } = req.body;
-    const objectItem = new ObjectItem({ name, lat, lon });
+router.post("/", validateObjectItem, async (req, res) => {
+    const { name, geometry, symbolType } = req.body;
+    const objectItem = new ObjectItem({
+        name,
+        geometry,
+        symbolType
+    });
     await objectItem.save();
     res.status(201).json(objectItem);
 });
 
 // PUT (update) object
-router.put("/:id", async (req, res) => {
-    const { name, lat, lon } = req.body;
+router.put("/:id", validateObjectItem, async (req, res) => {
+    const { name, geometry, symbolType } = req.body;
     const objectItem = await ObjectItem.findByIdAndUpdate(
         req.params.id,
-        { name, lat, lon },
+        {
+            name,
+            geometry,
+            symbolType
+        },
         { new: true }
     );
     if (!objectItem) return res.status(404).json({ message: "Object not found" });

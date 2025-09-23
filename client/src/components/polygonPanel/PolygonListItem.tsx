@@ -41,6 +41,7 @@ const PolygonListItem = ({ polygon, isPolygonToEdit, handleSaveEditedPolygon, se
                         ? "list-item__update-coordinates-btn--pressable"
                         : "list-item__update-coordinates-btn--disabled"
                 )}
+                disabled={!isPolygonToEdit}
                 onClick={() => dispatch(setDrawingMode('polygon'))}
             >
                 {"לחץ כדי לעדכן קורדינטות"}
