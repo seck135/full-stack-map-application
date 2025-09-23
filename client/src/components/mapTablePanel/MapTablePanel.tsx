@@ -25,7 +25,7 @@ const MapTablePanel = () => {
         // as const define it as "אובייקט" and not just as string
         ...(objects ?? []).map((obj) => ({ ...obj, type: "אובייקט" as const })),
         ...(polygons ?? []).map((poly) => ({ ...poly, type: "פוליגון" as const })),
-    ];
+    ].sort((a, b) => a.name.localeCompare(b.name, "he")); // sort by name in Hebrew
 
     const handleCollapseChange = (polygonId: string, keys: string | string[]) => {
         if (keys.length > 0) {
