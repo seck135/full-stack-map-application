@@ -7,7 +7,7 @@ import { setDrawingMode } from '../../store/draftCoordinatesSlice';
 import type { IPolygonCreate, Polygon } from '../../types/types';
 import type { Mode } from '../PanelsContainer';
 import PolygonListItem from './PolygonListItem';
-import CreateNewPolygonForm from './CreateNewPolygonForm';
+import CreatePolygonForm from './CreatePolygonForm';
 
 
 interface PolygonPanelProps {
@@ -55,7 +55,7 @@ const PolygonPanel = ({ handleSavePolygon, }: PolygonPanelProps) => {
         <div className="management-panel">
             <h2 className="management-panel--title">ניהול פוליגונים 🗺️</h2>
 
-            <CreateNewPolygonForm
+            <CreatePolygonForm
                 newPolygonName={newPolygonName}
                 setNewPolygonName={setNewPolygonName}
                 isNewPolygonNameEmpty={isNewPolygonNameEmpty}

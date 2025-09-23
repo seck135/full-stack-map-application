@@ -2,7 +2,7 @@ import { Popover } from "antd";
 import { useDispatch } from "react-redux";
 import { setDrawingMode } from "../../store/draftCoordinatesSlice";
 
-interface ICreateNewPolygonFormProps {
+interface ICreatePolygonFormProps {
     newPolygonName: string
     setNewPolygonName: (value: React.SetStateAction<string>) => void
     isNewPolygonNameEmpty: boolean
@@ -10,13 +10,13 @@ interface ICreateNewPolygonFormProps {
     handleCreatePolygon: () => void
 }
 
-const CreateNewPolygonForm = ({
+const CreatePolygonForm = ({
     newPolygonName,
     setNewPolygonName,
     isNewPolygonNameEmpty,
     isThereCoordinates,
     handleCreatePolygon
-}: ICreateNewPolygonFormProps) => {
+}: ICreatePolygonFormProps) => {
     const dispatch = useDispatch()
 
     return (
@@ -68,4 +68,4 @@ const CreateNewPolygonForm = ({
 
 }
 
-export default CreateNewPolygonForm;
+export default CreatePolygonForm;

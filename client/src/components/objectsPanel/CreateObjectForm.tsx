@@ -6,7 +6,7 @@ import { IconNamesEnum, type IconNamesEnumKey } from "../enums/customSymbolsEnum
 const { Option } = Select;
 
 
-interface ICreateNewObjectFormProps {
+interface ICreateObjectFormProps {
     newObjectName: string
     setNewObjectName: (value: React.SetStateAction<string>) => void
     selectedIcon: IconNamesEnumKey
@@ -16,7 +16,7 @@ interface ICreateNewObjectFormProps {
     handleCreateObjectMarker: () => void
 }
 
-const CreateNewObjectForm = ({
+const CreateObjectForm = ({
     newObjectName,
     setNewObjectName,
     selectedIcon,
@@ -24,7 +24,7 @@ const CreateNewObjectForm = ({
     isNewObjectNameEmpty,
     isThereCoordinate,
     handleCreateObjectMarker
-}: ICreateNewObjectFormProps) => {
+}: ICreateObjectFormProps) => {
     const dispatch = useDispatch()
 
     return (
@@ -94,4 +94,4 @@ const CreateNewObjectForm = ({
         </div>
     )
 }
-export default CreateNewObjectForm;
+export default CreateObjectForm;

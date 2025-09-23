@@ -5,7 +5,7 @@ import type { RootState } from '../../store';
 import type { IObjectCreate, ObjectMarker } from '../../types/types';
 import { type IconNamesEnumKey } from '../enums/customSymbolsEnum';
 import type { Mode } from '../PanelsContainer';
-import CreateNewObjectForm from './CreateNewObjectForm';
+import CreateObjectForm from './CreateObjectForm';
 import ObjectListItem from './ObjectListItem';
 
 
@@ -57,7 +57,7 @@ const ObjectPanel = ({ handleSaveObjectMarker }: ObjectPanelProps) => {
         <div className="management-panel">
             <h2 className="management-panel--title">ניהול אובייקטים 🗺️</h2>
 
-            <CreateNewObjectForm
+            <CreateObjectForm
                 newObjectName={newObjectName}
                 setNewObjectName={setNewObjectName}
                 selectedIcon={selectedIcon}
