@@ -1,0 +1,35 @@
+.map-table-panel {
+  display: flex;
+  overflow: hidden;
+
+  .ant-spin-nested-loading,
+  .ant-spin-container,
+  .ant-table,
+  .ant-table-container {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+
+    .ant-table-header {
+      flex: 0 0 auto; // will stay as the size it suppose to be
+      width: 100%;
+      .ant-table-cell {
+        text-align: center;
+      }
+    }
+
+    .ant-table-body {
+      flex: 1 1 auto; // will stretch to fill all the available space
+
+      .ant-table-cell {
+        @include overflow-elipsis;
+      }
+
+      .ant-collapse-header-text {
+        white-space: nowrap;
+      }
+
+    }
+  }
+
+}

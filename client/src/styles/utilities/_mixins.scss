@@ -20,3 +20,10 @@
         border-radius: 15px;
     }
 }
+
+@mixin overflow-elipsis {
+    text-align: center;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}

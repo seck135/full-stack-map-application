@@ -1,4 +1,5 @@
 import type { IObjectCreate, IPolygonCreate } from "../types/types";
+import MapTablePanel from "./mapTablePanel/MapTablePanel";
 import ObjectPanel from "./objectsPanel/ObjectPanel";
 import type { Mode } from "./PanelsContainer";
 import PolygonPanel from "./polygonPanel/PolygonPanel";
@@ -14,6 +15,7 @@ const SideBar = ({ handleSavePolygon, handleSaveObjectMarker  }: SideBarProps) =
         <div className="side-bar" >
             <PolygonPanel handleSavePolygon={handleSavePolygon}  />
             <ObjectPanel handleSaveObjectMarker={handleSaveObjectMarker} />
+            <MapTablePanel />
         </div>
     )
 }

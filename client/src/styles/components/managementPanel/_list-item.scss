@@ -13,6 +13,7 @@ $list-item-buttons-padding: 0.4rem 0.8rem;
     }
 
     &--name {
+        @include overflow-elipsis;
         width: 20rem;
         font-size: 2.2rem;
     }
