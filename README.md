@@ -18,6 +18,8 @@ npm i
 cp .env.example .env
 npm run dev
 
+## Running the Client
+
 2. Open a new terminal and navigate to the client folder:
 
 ```bash
