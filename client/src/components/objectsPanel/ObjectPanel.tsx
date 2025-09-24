@@ -55,7 +55,7 @@ const ObjectPanel = ({ handleSaveObjectMarker }: ObjectPanelProps) => {
 
     return (
         <div className="management-panel">
-            <h2 className="management-panel--title">ניהול אובייקטים 🗺️</h2>
+            <h2 className="management-panel--title">ניהול אובייקטים 📍</h2>
 
             <CreateObjectForm
                 newObjectName={newObjectName}
