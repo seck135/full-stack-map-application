@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { usePolygons } from '../../api/queries/polygons';
 import type { RootState } from '../../store';
 import type { IPolygonCreate, Polygon } from '../../types/types';
@@ -13,7 +13,6 @@ interface PolygonPanelProps {
 }
 
 const PolygonPanel = ({ handleSavePolygon, }: PolygonPanelProps) => {
-    const dispatch = useDispatch()
     const { polygonDraftCoordinates, } = useSelector((state: RootState) => state.draftCoordinates);
 
 
