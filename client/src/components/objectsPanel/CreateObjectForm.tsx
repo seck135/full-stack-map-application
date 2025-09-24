@@ -46,7 +46,7 @@ const CreateObjectForm = ({
                     className="create-form__btn create-form__mark-coordinates-btn"
                     onClick={() => dispatch(setDrawingMode('marker'))}
                 >
-                    סמן אובייקט
+                    לחץ לסמן אובייקט
                 </button>
             </Popover>
             <Popover

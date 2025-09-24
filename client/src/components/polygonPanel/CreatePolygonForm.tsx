@@ -38,7 +38,7 @@ const CreatePolygonForm = ({
                     className="create-form__btn create-form__mark-coordinates-btn"
                     onClick={() => dispatch(setDrawingMode('polygon'))}
                 >
-                    סמן פוליגון
+                    לחץ לסמן פוליגון
                 </button>
             </Popover>
 
