@@ -15,4 +15,13 @@ This is a **Client–Server application** for managing geographic objects (Polyg
 ```bash
 cd server
 npm i
+cp .env.example .env
+npm run dev
+
+2. Open a terminal and navigate to the client folder:
+
+```bash
+cd client
+npm i
+cp .env.example .env
 npm run dev
