@@ -38,7 +38,7 @@ const MapPanel = ({
     editedPointsToDisplay,
 }: MapPanelProps) => {
 
-    const mapCenter = { lat: 31.7683, lon: 35.2137 };
+    const mapCenter = { lon: 34.82, lat: 32.07  };
 
     // ---- leatlet expects [lat, lon] instaed of [lon, lat]
     // Convert edited points from [lon, lat] → [ lat, lon ] 
