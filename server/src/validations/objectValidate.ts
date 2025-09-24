@@ -4,7 +4,6 @@ import { Request, Response, NextFunction } from "express";
 export function validateObjectItem(req: Request, res: Response, next: NextFunction) {
     const { name, geometry, symbolType } = req.body;
     const { type, coordinates } = geometry || {};
-        console.log(name, type, coordinates, symbolType);
         
     if (!name || typeof name !== "string" || name.trim() === "") {
         return res.status(400).json({ message: "Invalid name. Name must be a non-empty string." });
